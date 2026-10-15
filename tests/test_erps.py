@@ -238,6 +238,30 @@ def test_audit_is_append_only(client,server):
             c.execute("DELETE FROM erps.audit WHERE workspace=%s",(client.workspace,))
 
 
+def test_installer_recovers_saved_credentials_and_preserves_existing_database(server):
+    import psycopg
+    from psycopg import sql
+    from urllib.parse import urlsplit, urlunsplit
+    from foundation import config
+    from scripts.setup_erps import ensure_database
+    admin=config.DATABASE_URL.replace("postgresql+psycopg://","postgresql://")
+    parts=urlsplit(admin)
+    name="erps_recovery_"+uuid.uuid4().hex[:12]
+    password=secrets.token_hex(24)
+    target=urlunsplit(("postgresql",f"{name}:{password}@{parts.hostname}:{parts.port}","/"+name,"",""))
+    try:
+        ensure_database(admin,target)
+        with psycopg.connect(target) as c:
+            c.execute("CREATE TABLE sentinel(value INTEGER)");c.execute("INSERT INTO sentinel VALUES(42)")
+        ensure_database(admin,target)
+        with psycopg.connect(target) as c:
+            assert c.execute("SELECT value FROM sentinel").fetchone()[0]==42
+    finally:
+        with psycopg.connect(admin,autocommit=True) as c:
+            c.execute(sql.SQL("DROP DATABASE IF EXISTS {} WITH (FORCE)").format(sql.Identifier(name)))
+            c.execute(sql.SQL("DROP ROLE IF EXISTS {}").format(sql.Identifier(name)))
+
+
 def test_transaction_history_and_ontology_validation(client,server):
     import psycopg
     a=mention(attributes={"passport":"A"})
@@ -311,6 +335,8 @@ def test_extraction_utf8_offsets_and_deterministic_ids():
     assert person["byte_offset"]==len(text[:text.index("John")].encode())
     assert person["offset_space"]=="ExtractedTextUtf8"
     assert len({m["id"] for m in mentions})==len(mentions)
+    noisy=extract("EV-noisy","a."*10000+" ok@example.org")
+    assert [m["surface"] for m in noisy if m["kind"]=="Email"]==["ok@example.org"]
 
 
 def test_client_auth_contract_and_failure_propagation(monkeypatch):

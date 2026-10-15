@@ -17,7 +17,7 @@ from .erps_client import ErpsClient
 
 NAMESPACE = uuid.UUID("f335e603-4a93-48c8-8c16-d48a3f083b09")
 PATTERNS = [
-    ("Email", re.compile(r"\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b")),
+    ("Email", re.compile(r"(?<![\w.+-])[\w.+-]{1,64}@[\w.-]{1,253}\.[A-Za-z]{2,63}\b")),
     ("Doi", re.compile(r"\b10\.\d{4,9}/[^\s<>\"]+", re.I)),
     ("Handle", re.compile(r"(?<!\w)@[A-Za-z0-9_]{2,30}\b")),
     ("Person", re.compile(r"\b[A-Z][a-z]{1,30}(?:[ -][A-Z][a-z]{1,30}){1,2}\b")),

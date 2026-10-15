@@ -1,4 +1,4 @@
-FROM rust:1.90.0-slim-bookworm AS builder
+FROM rust:1.90.0-slim-bookworm@sha256:64232e656c058f4468e8d024e990acff04f0fd5a5c0a88a574dc37773d7325c9 AS builder
 ENV CARGO_BUILD_JOBS=2
 RUN --mount=type=bind,source=.,target=/src \
     --mount=type=cache,id=sherlock-erps-target,target=/src/target \
@@ -7,7 +7,9 @@ RUN --mount=type=bind,source=.,target=/src \
     if [ -f /run/secrets/proxy_ca ]; then \
       export CARGO_HTTP_CAINFO=/run/secrets/proxy_ca SSL_CERT_FILE=/run/secrets/proxy_ca CURL_CA_BUNDLE=/run/secrets/proxy_ca; \
     fi; \
-    cd /src && cargo build --locked --release -p erps-api && \
+    cd /src && \
+    cargo clean --release -p erps-core -p erps-store -p erps-api && \
+    cargo build --locked --release -p erps-api && \
     mkdir -p /out && cp target/release/erps-api /out/erps-api
 
 FROM python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e AS runtime

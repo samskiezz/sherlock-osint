@@ -13,7 +13,7 @@ run the same workflow; documentation-only updates do not rerun it.
 | --- | --- |
 | Rust workspace tests | 14 passed, including an 8,385-pair multi-batch scoring parity test |
 | Rust formatting / Clippy with warnings denied | Passed |
-| ERPS Python acceptance tests | 15 passed; real Rust process and temporary Postgres database |
+| ERPS Python acceptance tests | 16 passed; real Rust process and temporary Postgres database |
 | Existing local backend regression | 490 current cases covered across module and focused runs; details below |
 | Foundation integration | 4 passed, 3 failed due to missing historical fixtures and public DNS |
 | Available retrieval tests | 5 passed; 6 model/search checks not run |
@@ -24,9 +24,21 @@ run the same workflow; documentation-only updates do not rerun it.
 | Original preservation | Uploaded synthetic original retrieved byte-for-byte; SHA-256 verified |
 | Restart/outbox recovery | Controlled missing outbox entry recovered after supervisor restart |
 | Native Docker image | Passed real Postgres resolution, retraction, audit, anonymous denial and non-root/read-only/capability checks |
-| Production source image / isolated Compose | In progress at report preparation; updated before publication |
+| Production source image / isolated Compose | Passed on Postgres 16.15, including exact u64 JSON and UUID-normalized retraction |
 | Python dependency consistency | pip check passed |
 | Staged source privacy check | No bound runtime secret values, evidence vault, databases or build outputs included |
+
+Production image: `sherlock-erps:0.1`, SHA-256
+`81696b4223c6a57d2389273a87a8d7d04210c9e266f794817411c3ad53e3c6d6`.
+The image was built from locked source in the pinned Rust toolchain and tested
+with a fresh, isolated Postgres 16 database. Its temporary project and volume
+were removed. The first cold release build took 43 minutes 50 seconds with two
+compiler jobs in this VFS-backed environment; subsequent workspace rebuilds
+reused compiled dependencies. A build-context exclusion error and a Compose
+tmpfs-list error were found and corrected during these checks. The final
+Compose test passed. The smaller Alpine Postgres image provides appropriate
+headroom on the 32 GiB cloud disk. Build cache cleanup preserved the case vault,
+active database volumes, model runtime and active application images.
 
 ## Regression accounting
 
@@ -52,7 +64,7 @@ The implementation retains network-disabled extraction, immutable originals,
 read-only mounts/root, dropped capabilities and the independent 90-second
 parser execution limit. The core's creation timeout is bounded to 45–300 seconds.
 
-Across current Python coverage, 514 cases passed, three external integration
+Across current Python coverage, 515 cases passed, three external integration
 cases remain failed, and six retrieval cases were not run. Rust, browser,
 container and Worker checks are reported separately rather than mixed into
 that Python count.

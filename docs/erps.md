@@ -37,7 +37,10 @@ foundation setup. These commands preserve its existing private configuration.
 `setup_erps.py` creates a dedicated `erps_app` role and `erps` database using
 the existing local database administrator. It generates random service,
 writer, and reader tokens in `data/erps.json` (0600). It never prints secrets
-or overwrites an existing configuration. A separately provisioned deployment
+or overwrites an existing configuration. Setup can resume from retained
+credentials if a fresh local database server lacks
+the ERPS role/database; existing databases and role passwords are preserved.
+A separately provisioned deployment
 can instead supply `ERPS_DATABASE_URL`, `ERPS_TOKEN`, `ERPS_WORKSPACE` and
 optional `ERPS_READER_TOKEN`/`ERPS_WRITER_TOKEN` environment variables to the
 Rust executable. Migrations run at service startup.
