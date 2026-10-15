@@ -1,0 +1,27 @@
+{
+  "mentions": [
+    {
+      "id": "be9940ed-7d09-4a5c-8a38-fb408de79ab1",
+      "evidence_id": "7fd29bb7-89ef-4c21-99cd-1680b2a152c1",
+      "byte_offset": 0,
+      "offset_space": "SourceBytes",
+      "surface": "John Smith",
+      "kind": "Person",
+      "context": "",
+      "valid_from": 0,
+      "valid_to": 100
+    },
+    {
+      "id": "b777287a-577e-4b42-a5f9-010c4104f01a",
+      "evidence_id": "19137635-3ccd-4ae3-8c5e-e694d97beee9",
+      "byte_offset": 0,
+      "offset_space": "SourceBytes",
+      "surface": "JOHN SMITH",
+      "kind": "Person",
+      "context": "",
+      "valid_from": 0,
+      "valid_to": 100
+    }
+  ],
+  "constraints": []
+}

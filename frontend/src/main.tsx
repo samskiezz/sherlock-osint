@@ -8,6 +8,7 @@ import {
 } from "./CollectionWorkspaces";
 import TradecraftWorkspace from "./TradecraftWorkspace";
 import KnowledgeWorkspace from "./KnowledgeWorkspace";
+import EntitiesWorkspace from "./EntitiesWorkspace";
 import AutomationWorkspace from "./AutomationWorkspace";
 import AutonomousWorkspace from "./AutonomousWorkspace";
 import CaseOverview from "./CaseBreakdown";
@@ -235,6 +236,7 @@ const nav = [
   ["library", "Evidence library", Files],
   ["vault", "Growing database", Files],
   ["knowledge", "Evidence retrieval", Search],
+  ["entities", "Entity resolution", GitBranch],
   ["autonomous", "Investigation", Bot],
   ["lab", "Forensic analysis", FlaskConical],
   ["automation", "Automation control", Activity],
@@ -257,7 +259,7 @@ function App() {
   const [evidence, setEvidence] = useState<Evidence[]>([]),
     [jobs, setJobs] = useState<Job[]>([]),
     [activity, setActivity] = useState<any[]>([]),
-    [view, setView] = useState("board"),
+    [view, setView] = useState(new URLSearchParams(window.location.search).get("view") === "entities" ? "entities" : "board"),
     [selected, setSelected] = useState<string | null>(null),
     [edgeSelected, setEdgeSelected] = useState<Edge | null>(null),
     [theme, setTheme] = useState(localStorage.getItem("theme") || "dark"),
@@ -598,6 +600,7 @@ function App() {
                 "autonomous",
                 "board",
                 "library",
+                "entities",
                 "research",
                 "timeline",
               ].includes(id),
@@ -1243,6 +1246,8 @@ function App() {
                   selectEvidence={selectEvidence}
                   notify={notify}
                 />
+              ) : view === "entities" ? (
+                <EntitiesWorkspace />
               ) : view === "knowledge" ? (
                 <KnowledgeWorkspace
                   selectEvidence={selectEvidence}

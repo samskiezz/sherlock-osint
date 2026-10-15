@@ -399,8 +399,9 @@ def test_supervisor_retains_control_when_status_writes_fail(tmp_path):
     assert read_pid(pid) == 123
 
 
+@pytest.mark.parametrize("creation_budget", [45, 180])
 def test_timed_out_container_creation_still_attempts_owned_cleanup(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, creation_budget
 ):
     """The resource failure must not leave a created container outside the cleanup path."""
     from backend import sandbox
@@ -418,8 +419,9 @@ def test_timed_out_container_creation_still_attempts_owned_cleanup(
         return ""
 
     monkeypatch.setattr(sandbox, "command", command)
+    monkeypatch.setattr(sandbox, "CREATE_TIMEOUT", creation_budget)
     with pytest.raises(sandbox.SandboxError, match="Synthetic create timeout"):
         sandbox._run(original, "text/plain", digest, tmp_path / "derivative")
-    assert calls[0][0][0] == "create" and calls[0][1] == 45
+    assert calls[0][0][0] == "create" and calls[0][1] == creation_budget
     assert calls[-1][0][:2] == ["rm", "--force"]
     assert calls[-1][0][-1] == calls[0][0][calls[0][0].index("--name") + 1]

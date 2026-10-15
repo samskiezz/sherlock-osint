@@ -1,0 +1,24 @@
+FROM rust:1.90.0-slim-bookworm AS builder
+ENV CARGO_BUILD_JOBS=2
+RUN --mount=type=bind,source=.,target=/src \
+    --mount=type=cache,id=sherlock-erps-target,target=/src/target \
+    --mount=type=cache,id=sherlock-erps-registry,target=/usr/local/cargo/registry \
+    --mount=type=secret,id=proxy_ca,required=false \
+    if [ -f /run/secrets/proxy_ca ]; then \
+      export CARGO_HTTP_CAINFO=/run/secrets/proxy_ca SSL_CERT_FILE=/run/secrets/proxy_ca CURL_CA_BUNDLE=/run/secrets/proxy_ca; \
+    fi; \
+    cd /src && cargo build --locked --release -p erps-api && \
+    mkdir -p /out && cp target/release/erps-api /out/erps-api
+
+FROM python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e AS runtime
+USER 65532:65532
+ENV ERPS_BIND=0.0.0.0:3000
+EXPOSE 3000
+ENTRYPOINT ["/usr/local/bin/erps-api"]
+
+# Local smoke-test target using the already tested native executable.
+FROM runtime AS native
+COPY --chmod=555 target/debug/erps-api /usr/local/bin/erps-api
+
+FROM runtime AS production
+COPY --from=builder --chmod=555 /out/erps-api /usr/local/bin/erps-api

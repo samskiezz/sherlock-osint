@@ -1,0 +1,53 @@
+name: ERPS verification
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-local-only
+          POSTGRES_DB: sherlock
+        ports: ["55432:5432"]
+        options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql+psycopg://postgres:ci-local-only@127.0.0.1:55432/sherlock
+      CARGO_BUILD_JOBS: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Python test dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install pytest httpx fastapi 'psycopg[binary]'
+      - name: Rust formatting, lint, tests, and executable
+        run: |
+          cargo fmt --all -- --check
+          cargo clippy --locked --workspace --all-targets -- -D warnings
+          cargo test --locked --workspace
+          cargo build --locked -p erps-api
+      - name: Real database acceptance tests
+        run: |
+          mkdir -p data
+          .venv/bin/python scripts/setup_erps.py
+          .venv/bin/python -m pytest -q tests/test_erps.py --junitxml=data/erps-tests.xml
+      - name: Frontend type check and production build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+      - name: Synthetic evaluation
+        run: cargo run --locked -p erps-eval --bin eval -- --entities 100 --mentions-per 5 --noise 0.15 --seed 42 --repeats 5 --output data/erps-evaluation.json

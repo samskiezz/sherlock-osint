@@ -1,0 +1,13 @@
+**
+!Cargo.toml
+!Cargo.lock
+!rust-toolchain.toml
+!erps-core/**
+!erps-store/**
+!erps-api/**
+!erps-eval/**
+!target/
+target/**
+!target/debug/
+target/debug/**
+!target/debug/erps-api

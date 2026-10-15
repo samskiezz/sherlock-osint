@@ -38,3 +38,4 @@ SECURE_COOKIES = os.environ.get("GATEWAY_SECURE_COOKIES", "false").lower() == "t
 
 CORE_TOKEN = os.environ.get("CORE_TOKEN", "")
 CORE_HEADERS = {"X-Sherlock-Core-Token": CORE_TOKEN} if CORE_TOKEN else {}
+CORE_PROXY_TIMEOUT = max(120, min(600, int(os.environ.get("SHERLOCK_CORE_PROXY_TIMEOUT", "300"))))

@@ -1,0 +1,42 @@
+name: sherlock-erps
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: erps_app
+      POSTGRES_DB: erps
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets: [postgres_password]
+    volumes: [erps_pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U erps_app -d erps"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  api:
+    image: ${ERPS_IMAGE:-sherlock-erps:0.1}
+    build:
+      context: .
+      dockerfile: Dockerfile.erps
+      target: production
+      secrets: [proxy_ca]
+    env_file: data/erps-compose.env
+    ports: ["127.0.0.1:3000:3000"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 256
+    mem_limit: 2g
+    tmpfs: [/tmp:rw, noexec, nosuid, size=64m]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+secrets:
+  proxy_ca:
+    file: ${SSL_CERT_FILE:-/etc/ssl/certs/ca-certificates.crt}
+  postgres_password:
+    file: data/erps-compose-db-password
+volumes:
+  erps_pgdata:

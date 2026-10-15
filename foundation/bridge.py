@@ -20,12 +20,15 @@ async def proxy(path: str, request: Request) -> Response:
     body = await request.body()
     if len(body) > 26 * 1024 * 1024:
         return Response("Body too large", status_code=413)
-    client = httpx.AsyncClient(trust_env=False, timeout=120)
+    client = httpx.AsyncClient(trust_env=False, timeout=config.CORE_PROXY_TIMEOUT)
     headers = {
         k: v
         for k, v in request.headers.items()
         if k.lower() in ("content-type", "range", "if-none-match")
     }
+    if path.startswith("api/erps/"):
+        headers["X-Sherlock-Core-Token"] = config.CORE_TOKEN
+        headers["X-Sherlock-Erps-Role"] = request.headers.get("x-sherlock-erps-role", "Viewer")
     response = await client.send(
         client.build_request(
             request.method,

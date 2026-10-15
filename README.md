@@ -1,5 +1,14 @@
 # SHERLOCK OSINT — PROJECT LOOKING GLASS
 
+## Entity Resolution and Provenance Service
+
+The repository now includes the buildable Rust ERPS workspace, Postgres migrations,
+Tantivy blocking, Arrow/DataFusion scoring, exact provenance and source retraction,
+Python ingestion, and the **Entity resolution** browser. See [the ERPS build and
+operating guide](docs/erps.md) for commands, API behavior, tests, and measured limits.
+This addition is a bounded implementation; it does not establish million-mention
+performance or the blueprint's example accuracy and latency figures.
+
 The current release runs at **http://127.0.0.1:8010** in the provided Linux workspace. It opens on **Evidence board**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
 
 ## GitHub source delivery

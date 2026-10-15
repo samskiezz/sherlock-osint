@@ -8,6 +8,7 @@ from contextlib import contextmanager
 import fcntl
 
 IMAGE = os.environ.get("SHERLOCK_PROCESSOR_IMAGE", "sherlock-processor:0.4")
+CREATE_TIMEOUT = max(45, min(300, int(os.environ.get("SHERLOCK_CONTAINER_CREATE_TIMEOUT", "45"))))
 MAX_OUTPUT = 32 * 1024 * 1024
 
 
@@ -323,7 +324,7 @@ def _run(original: Path, mime: str, expected_sha: str, derivative: Path, probe=F
         if probe:
             args.append("--probe")
         try:
-            command(args, timeout=45)
+            command(args, timeout=CREATE_TIMEOUT)
             inspected = json.loads(command(["inspect", name]))[0]
             manifest = policy(inspected["HostConfig"])
             mounts = inspected["Mounts"]

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "node scripts/pdf-assets.mjs && tsc -b && vite build",
+    "test:erps-browser": "node scripts/test-erps-browser.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {

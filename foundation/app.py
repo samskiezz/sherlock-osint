@@ -534,15 +534,15 @@ async def core_proxy(path: str, request: Request) -> Response:
     action = "read" if request.method == "GET" else "write"
     resource = (
         "users"
-        if path in ("api/models/config", "api/onion/config", "api/forensics/settings")
+        if path in ("api/models/config", "api/onion/config", "api/forensics/settings", "api/erps/deletion")
         else "legacy"
     )
-    require(request, resource, action)
+    user = require(request, resource, action)
     client = httpx.AsyncClient(
         base_url=config.CORE_URL,
         headers=config.CORE_HEADERS,
         trust_env=False,
-        timeout=120,
+        timeout=config.CORE_PROXY_TIMEOUT,
     )
     headers = {
         k: v
@@ -550,6 +550,8 @@ async def core_proxy(path: str, request: Request) -> Response:
         if k.lower() in ("content-type", "range", "if-none-match")
     }
     headers.update(config.CORE_HEADERS)
+    if path.startswith("api/erps/"):
+        headers["X-Sherlock-Erps-Role"] = user.role
     upstream = await client.send(
         client.build_request(
             request.method,

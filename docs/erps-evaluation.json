@@ -1,0 +1,37 @@
+{
+  "b_cubed_f1": 0.9073426573426571,
+  "b_cubed_precision": 1.0,
+  "b_cubed_recall": 0.8303999999999996,
+  "blocking_quality": 0.03282347534957001,
+  "blocking_recall": 1.0,
+  "blocking_reduction": 0.7557835671342685,
+  "candidate_pairs": 30466,
+  "cluster_f1": 0.4489795918367347,
+  "dataset": {
+    "entities": 100,
+    "mentions_per_entity": 5,
+    "noise": 0.15,
+    "repeats": 5,
+    "seed": 42,
+    "timing_scope": "in-process blocking, scoring, clustering; excludes HTTP and persistence",
+    "type": "synthetic"
+  },
+  "latency_p50_ms": 5844.285646,
+  "latency_p95_ms": 7088.011834999999,
+  "latency_p99_ms": 7088.011834999999,
+  "pairwise_f1": 0.8814317673378076,
+  "pairwise_precision": 1.0,
+  "pairwise_recall": 0.788,
+  "true_pairs": 1000,
+  "measurement": {
+    "build_profile": "dev (unoptimized, debug info disabled)",
+    "rust_toolchain": "1.90.0",
+    "captured_at": "2026-10-15T22:23:11.945088+11:00",
+    "scope": "in-process harness, not HTTP or database latency",
+    "limitations": [
+      "500 synthetic mentions; not a forensic accuracy estimate",
+      "Five repeats do not establish a production p99",
+      "No baseline comparisons or million-mention result claimed"
+    ]
+  }
+}

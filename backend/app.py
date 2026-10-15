@@ -649,6 +649,8 @@ def process(eid):
                 "image_id": result["sandbox"]["image_id"],
             },
         )
+        if "erps" in globals():
+            erps["enqueue"](eid)
 
 
 executor = ThreadPoolExecutor(max_workers=2)
@@ -1480,6 +1482,9 @@ case_briefing = install_case_briefing(sys.modules[__name__])
 case_breakdown = install_case_breakdown(sys.modules[__name__])
 dossier_verification = install_dossier_verification(sys.modules[__name__])
 automatic_workspaces = install_automatic_workspaces(sys.modules[__name__])
+
+from .erps import install as install_erps
+erps = install_erps(sys.modules[__name__])
 
 # Production: one loopback service serves the compiled UI and API.
 from fastapi.staticfiles import StaticFiles
