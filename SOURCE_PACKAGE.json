@@ -28,19 +28,19 @@
     },
     {
       "path": "GITHUB_UPLOAD.json",
-      "sha256": "d8d72b99b4f99696b212150f9a3455c9397ea4ce74c885a62a7aed1560742006"
+      "sha256": "9e3a501bf06bf2acda26747d08693215e60b258f3b950599c7e8e623ed533ba2"
     },
     {
       "path": "IMPLEMENTATION_GAPS.json",
-      "sha256": "0ab580ef370c649e60e04e82ada0d8da60bddc1cc0908087e521ab6befc114bf"
+      "sha256": "7afeee3b85218c01baed2ceaca20a47f24b831bff60bcefa2d9013fd20670f32"
     },
     {
       "path": "README.md",
-      "sha256": "5a0d49f5229653bc472e9c819ccd9c1b67a983e1e2f2b05bac7ffc7e5a8cb0bc"
+      "sha256": "5c626dd8d2c5fe75016e94aa4fe8f2c34a0575e145bde7c44d26dffe3182daa8"
     },
     {
       "path": "SOURCE_VALIDATION.json",
-      "sha256": "4d8820e70f6c0f27d688028340aec776598e182916cbf25b1578abf72c5808fc"
+      "sha256": "da26b754ea3f6c20adb812adfc10863b372f208968e6636f78fabb2e2e1287e6"
     },
     {
       "path": "acquire_demo.py",
@@ -56,7 +56,7 @@
     },
     {
       "path": "artifacts/delivery-readiness.json",
-      "sha256": "6ee2daf0fac48d822df2b02b1ad6edc0595cb298583b8cacf3c840d89d94c391"
+      "sha256": "7aa6c15b0770f069a67955044b4756f3b92a83cbb245b5f59928080783196439"
     },
     {
       "path": "artifacts/embedding-model-integrity-v9.json",
@@ -620,7 +620,7 @@
     },
     {
       "path": "scripts/audit_requested_scope.py",
-      "sha256": "ecdafcce1a004bb2aa81e445ac8c712d7414e4575165d860b45db9eb89502199"
+      "sha256": "5e9de6db0b72b52ef643c9ee4894d8ae3e79c2351ebbeed1755a427c37a476b8"
     },
     {
       "path": "scripts/bootstrap_foundation.py",
@@ -910,5 +910,6 @@
   "retained_remote_seed_commit": "954f0523cd2d09251ade13f64e2fcdd55d7f6a9a",
   "retained_remote_files": [
     "LICENSE"
-  ]
+  ],
+  "published_tracked_files": 225
 }

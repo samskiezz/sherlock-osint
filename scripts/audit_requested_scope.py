@@ -386,9 +386,9 @@ items = [
     (
         "DEPLOY-03",
         "Upload current source to GitHub, as subsequently requested",
-        "SOURCE PREPARED; UPLOAD VERIFICATION PENDING",
+        "VERIFIED",
         "GITHUB_UPLOAD.json",
-        "GitHub destination is accessible; verify the remote commit after uploading current source",
+        "Current source uploaded and verified. Full platform completion and evidence-vault export remain separate.",
     ),
     (
         "QUALITY-01",
@@ -480,7 +480,7 @@ data = {
         for name in integrations
     ],
     "execution": "Existing acquisition, scheduled-research, compatible-analysis and dossier-candidate workers continue while the workspace runs. This is not a claim that the assistant keeps editing code after its turn ends.",
-    "github_push": "Current source upload authorised and destination accessible; see GITHUB_UPLOAD.json for verification.",
+    "github_push": "Uploaded and verified at https://github.com/samskiezz/sherlock-osint. See GITHUB_UPLOAD.json; full platform completion remains false.",
 }
 existing_path = ROOT / "IMPLEMENTATION_GAPS.json"
 if existing_path.is_file():

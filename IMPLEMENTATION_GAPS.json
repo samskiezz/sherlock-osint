@@ -382,9 +382,9 @@
     {
       "id": "DEPLOY-03",
       "requirement": "Upload current source to GitHub, as subsequently requested",
-      "status": "SOURCE PREPARED; UPLOAD VERIFICATION PENDING",
+      "status": "VERIFIED",
       "evidence": "GITHUB_UPLOAD.json",
-      "remaining": "Push and verify current source in the owner-enabled GitHub repository; full platform completion remains separate"
+      "remaining": "Current source uploaded and verified. This does not establish full platform completion or upload the evidence vault."
     },
     {
       "id": "QUALITY-01",
@@ -722,7 +722,7 @@
     }
   ],
   "execution": "Existing acquisition, scheduled-research, compatible-analysis and dossier-candidate workers continue while the workspace runs. This is not a claim that the assistant keeps editing code after its turn ends.",
-  "github_push": "Current source upload authorised and destination accessible; verification pending in GITHUB_UPLOAD.json.",
+  "github_push": "Uploaded and verified at https://github.com/samskiezz/sherlock-osint (public source-only repository). See GITHUB_UPLOAD.json; platform completion remains false.",
   "latest_validation": {
     "backend_tests": 507,
     "warnings": 186,

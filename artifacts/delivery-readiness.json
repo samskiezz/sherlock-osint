@@ -14,12 +14,15 @@
   ],
   "private_https_access_verified": true,
   "private_url": "https://sherlock-looking-glass-access.sam-kazangas-5963.chatgpt.site",
-  "upload_status": "READY_TO_PUSH",
-  "upload_completed": false,
+  "upload_status": "UPLOADED_AND_VERIFIED",
+  "upload_completed": true,
   "repository_visibility": "public",
   "previous_creation_error": {
     "status": 403,
     "message": "Resource not accessible by integration",
     "operation": "POST /user/repos"
-  }
+  },
+  "verified_source_commit": "c43d7c1096d93d4f1e10ea40564906c75c2bc442",
+  "verified_source_files": 225,
+  "repository_url": "https://github.com/samskiezz/sherlock-osint"
 }

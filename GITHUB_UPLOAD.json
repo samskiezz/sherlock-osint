@@ -1,14 +1,14 @@
 {
   "requested_action": "Upload the current SHERLOCK OSINT source to GitHub",
   "authorised": true,
-  "updated_utc": "2026-10-15T08:20:12.791817+00:00",
-  "status": "READY_TO_PUSH",
-  "uploaded": false,
+  "updated_utc": "2026-10-15T08:21:36.885577+00:00",
+  "status": "UPLOADED_AND_VERIFIED",
+  "uploaded": true,
   "connected_account": "samskiezz",
   "intended_repository": "samskiezz/sherlock-osint",
   "repository_exists": true,
   "visibility": "public",
-  "required_next_step": "Push prepared source and verify the remote commit and files",
+  "required_next_step": "No remaining source-upload blocker. Full-platform gaps remain in IMPLEMENTATION_GAPS.json.",
   "completion_verified": false,
   "excludes": [
     "credentials",
@@ -27,5 +27,14 @@
     "status": 403,
     "message": "Resource not accessible by integration",
     "operation": "POST /user/repos"
+  },
+  "verified_commit": "c43d7c1096d93d4f1e10ea40564906c75c2bc442",
+  "verified_tree": "118700493e17de65bca8bb1b43ad2cf5430d022e",
+  "verified_files": 225,
+  "verification": "GitHub REST commit and recursive tree matched all 225 tracked local source files; credentials and evidence vault excluded",
+  "secret_scan": {
+    "tool": "Gitleaks 8.30.1",
+    "committed_source_findings": 0,
+    "source_directory_findings": 0
   }
 }

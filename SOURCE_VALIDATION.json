@@ -14,5 +14,13 @@
     "gitleaks_version": "8.30.1",
     "gitleaks_directory_findings": 0,
     "original_workspace_history_scan": "18 pre-packaging commits; no leaks found"
+  },
+  "github_source_upload": {
+    "repository": "https://github.com/samskiezz/sherlock-osint",
+    "visibility": "public",
+    "verified_source_commit": "c43d7c1096d93d4f1e10ea40564906c75c2bc442",
+    "verified_files": 225,
+    "all_tracked_files_match_remote": true,
+    "completion_verified": false
   }
 }
