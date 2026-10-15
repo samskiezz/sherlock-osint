@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "mentions_requested": 10000,
+  "workload": "seeded random identifiers with distinct overlapping passports; singleton ground truth",
+  "batches": [
+    {
+      "mentions": 1000,
+      "candidate_pairs": 2088,
+      "scoring_engine": "rayon",
+      "http_round_trip_ms": 5887.657
+    },
+    {
+      "mentions": 2000,
+      "candidate_pairs": 8315,
+      "scoring_engine": "rayon",
+      "http_round_trip_ms": 7019.051
+    },
+    {
+      "mentions": 3000,
+      "candidate_pairs": 18411,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 11155.395
+    },
+    {
+      "mentions": 4000,
+      "candidate_pairs": 32671,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 13048.815
+    },
+    {
+      "mentions": 5000,
+      "candidate_pairs": 51250,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 17740.295
+    },
+    {
+      "mentions": 6000,
+      "candidate_pairs": 73713,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 17893.93
+    },
+    {
+      "mentions": 7000,
+      "candidate_pairs": 100280,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 22691.172
+    },
+    {
+      "mentions": 8000,
+      "candidate_pairs": 130967,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 41930.248
+    },
+    {
+      "mentions": 9000,
+      "candidate_pairs": 165793,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 56847.978
+    },
+    {
+      "mentions": 10000,
+      "candidate_pairs": 204653,
+      "scoring_engine": "datafusion",
+      "http_round_trip_ms": 40631.607
+    }
+  ],
+  "temporary_database_removed": true,
+  "full_capacity_counts": {
+    "mentions": 10000,
+    "entities": 10000
+  },
+  "idempotent_retry": true,
+  "capacity_overflow_rolled_back": true,
+  "deletion_and_resurrection_guard": true,
+  "concurrent_authenticated_reads": 8,
+  "audit_chain_valid": true,
+  "peak_rss_kib": 472852,
+  "crash_restart_persistence": true
+}

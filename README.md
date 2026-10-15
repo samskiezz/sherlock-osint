@@ -9,6 +9,8 @@ operating guide](docs/erps.md) for commands, API behavior, tests, and measured l
 This addition is a bounded implementation; it does not establish million-mention
 performance or the blueprint's example accuracy and latency figures.
 Current checks and external blockers are recorded in the [ERPS validation record](docs/erps-validation.md).
+The [expanded security and regression report](docs/security-validation.md) includes
+the upload-limit fix, 10,000-mention capacity run and unresolved dependency findings.
 
 The current release runs on port **8010 inside the provided Linux workspace**. The address `http://127.0.0.1:8010` works only on that machine; opening it on your phone or computer connects to your own device. Remote access requires an authenticated forwarded URL or a configured private relay. See [access from another device](docs/erps.md#access-from-another-device). It opens on **Evidence board**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
 

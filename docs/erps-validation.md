@@ -1,5 +1,9 @@
 # ERPS validation record
 
+The later [security and full-regression report](security-validation.md) records
+the expanded run, gateway fix, 10,000-mention capacity check and open dependency
+findings. Counts below describe the earlier implementation validation.
+
 Validated on 15 October 2026 in the cloud workspace. This record distinguishes
 executed checks, a resolved test-contract mismatch, and blocked external checks.
 It does not certify every capability of the thesis or the existing platform.

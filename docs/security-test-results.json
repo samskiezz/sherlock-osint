@@ -1,0 +1,287 @@
+{
+  "date": "2026-10-15",
+  "scope": "Sherlock ERPS; no VPN configured or actual VPN tunnel tested",
+  "tested_code_commit": "fefd3eb",
+  "original_python_matrix": {
+    "modules": 24,
+    "cases": 549,
+    "passed": 541,
+    "failed": 8,
+    "errors": 0,
+    "skipped": 0
+  },
+  "current_python_coverage": {
+    "modules": 26,
+    "cases": 563,
+    "passed": 555,
+    "failed": 8,
+    "errors": 0,
+    "skipped": 0,
+    "accounting": "24 original modules plus 10 gateway and 4 ASGI body-limit tests; affected gateway/browser checks reran after the fix, counted once"
+  },
+  "failed_cases": [
+    {
+      "module": "test_foundation.py",
+      "tests": [
+        "test_source_verified_graph_and_investigator_routes",
+        "test_persistent_celery_job_actual_original_and_ownership_not_assumed",
+        "test_internal_bridge_requires_token_and_preserves_original_bytes"
+      ]
+    },
+    {
+      "module": "test_retrieval.py",
+      "tests": [
+        "test_real_embedding_manifest_vectors_and_semantic_paraphrase_ranking",
+        "test_real_hybrid_search_returns_original_bytes_exact_offsets_and_pages",
+        "test_keyword_search_query_validation_and_real_index_inventory",
+        "test_saved_query_history_export_and_priority_queue_are_real",
+        "test_viewer_can_search_but_cannot_queue_index_or_change_rights"
+      ]
+    }
+  ],
+  "rust_tests": 17,
+  "worker_tests": 5,
+  "browser_views": 22,
+  "browser_exceptions": 0,
+  "erps_browser_flow": "passed",
+  "production_compose": {
+    "production_image_built_from_locked_source": true,
+    "compose_startup": true,
+    "postgres_version": "16.15",
+    "example_resolution": true,
+    "source_retraction": true,
+    "retracted_source_rejected": true,
+    "audit_chain": true,
+    "large_integer_json_precision": true,
+    "canonical_uuid_retraction": true,
+    "reader_write_denied": true,
+    "anonymous_denied": true,
+    "image": "sha256:81696b4223c6a57d2389273a87a8d7d04210c9e266f794817411c3ad53e3c6d6",
+    "temporary_project_cleaned_up": true
+  },
+  "capacity": {
+    "status": "passed",
+    "mentions_requested": 10000,
+    "workload": "seeded random identifiers with distinct overlapping passports; singleton ground truth",
+    "batches": [
+      {
+        "mentions": 1000,
+        "candidate_pairs": 2088,
+        "scoring_engine": "rayon",
+        "http_round_trip_ms": 5887.657
+      },
+      {
+        "mentions": 2000,
+        "candidate_pairs": 8315,
+        "scoring_engine": "rayon",
+        "http_round_trip_ms": 7019.051
+      },
+      {
+        "mentions": 3000,
+        "candidate_pairs": 18411,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 11155.395
+      },
+      {
+        "mentions": 4000,
+        "candidate_pairs": 32671,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 13048.815
+      },
+      {
+        "mentions": 5000,
+        "candidate_pairs": 51250,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 17740.295
+      },
+      {
+        "mentions": 6000,
+        "candidate_pairs": 73713,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 17893.93
+      },
+      {
+        "mentions": 7000,
+        "candidate_pairs": 100280,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 22691.172
+      },
+      {
+        "mentions": 8000,
+        "candidate_pairs": 130967,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 41930.248
+      },
+      {
+        "mentions": 9000,
+        "candidate_pairs": 165793,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 56847.978
+      },
+      {
+        "mentions": 10000,
+        "candidate_pairs": 204653,
+        "scoring_engine": "datafusion",
+        "http_round_trip_ms": 40631.607
+      }
+    ],
+    "temporary_database_removed": true,
+    "full_capacity_counts": {
+      "mentions": 10000,
+      "entities": 10000
+    },
+    "idempotent_retry": true,
+    "capacity_overflow_rolled_back": true,
+    "deletion_and_resurrection_guard": true,
+    "concurrent_authenticated_reads": 8,
+    "audit_chain_valid": true,
+    "peak_rss_kib": 472852,
+    "crash_restart_persistence": true
+  },
+  "streamed_upload_limit": {
+    "pre_fix_http_status": 422,
+    "post_fix_http_status": 413,
+    "gateway_and_body_limit_tests_passed": 14
+  },
+  "python_dependency_audit": {
+    "installed_packages": 103,
+    "known_advisories": 0,
+    "pip_upgraded_to": "26.2"
+  },
+  "frontend_dependency_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "optional_decoder_dependency_audit": {
+    "affected_package_counts": {
+      "info": 0,
+      "low": 4,
+      "moderate": 19,
+      "high": 2,
+      "critical": 0,
+      "total": 25
+    },
+    "root_advisories": [
+      {
+        "name": "elliptic",
+        "title": "Elliptic Uses a Cryptographic Primitive with a Risky Implementation",
+        "severity": "low",
+        "range": "<=6.6.1",
+        "url": "https://github.com/advisories/GHSA-848j-6mx2-7j84"
+      },
+      {
+        "name": "file-type",
+        "title": "file-type affected by infinite loop in ASF parser on malformed input with zero-size sub-header",
+        "severity": "moderate",
+        "range": ">=13.0.0 <21.3.1",
+        "url": "https://github.com/advisories/GHSA-5v7r-6r5c-r473"
+      },
+      {
+        "name": "node-forge",
+        "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+        "severity": "high",
+        "range": "<=1.4.0",
+        "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv"
+      }
+    ]
+  },
+  "rust_dependency_audit": {
+    "tool_version": "0.22.2",
+    "database": {
+      "advisory-count": 1329,
+      "last-commit": "edb58f5974b83eb8302332821cb6d389777aa351",
+      "last-updated": "2026-10-14T22:18:32+02:00"
+    },
+    "lockfile": {
+      "dependency-count": 397
+    },
+    "advisories": [
+      {
+        "id": "RUSTSEC-2023-0071",
+        "package": "rsa",
+        "version": "0.9.10",
+        "patched": []
+      }
+    ],
+    "warnings": {
+      "unmaintained": [
+        {
+          "id": "RUSTSEC-2024-0384",
+          "package": "instant",
+          "version": "0.1.13",
+          "patched": []
+        },
+        {
+          "id": "RUSTSEC-2024-0436",
+          "package": "paste",
+          "version": "1.0.15",
+          "patched": []
+        }
+      ],
+      "unsound": [
+        {
+          "id": "RUSTSEC-2026-0253",
+          "package": "lru",
+          "version": "0.12.5",
+          "patched": [
+            ">=0.18.2"
+          ]
+        },
+        {
+          "id": "RUSTSEC-2026-0002",
+          "package": "lru",
+          "version": "0.12.5",
+          "patched": [
+            ">=0.16.3"
+          ]
+        }
+      ]
+    },
+    "rsa_in_active_erps_api_dependency_tree": false,
+    "lru_in_active_erps_api_dependency_tree": true
+  },
+  "bandit": {
+    "counts_by_severity": {
+      "LOW": 264,
+      "MEDIUM": 2
+    },
+    "medium_findings": "Two container tmpfs path configurations; raw findings retained privately"
+  },
+  "remaining_prerequisites": [
+    "historical case evidence/board fixtures",
+    "public acquisition DNS",
+    "reviewed embedding model and search/index services",
+    "private hosting credentials",
+    "a VPN configuration and authorized VPN test target"
+  ],
+  "limits": [
+    "Finite owned-fixture tests do not certify universal safety",
+    "Synthetic capacity is not forensic matching accuracy",
+    "No distributed or million-mention test",
+    "Historical case-specific browser scripts were not executed against missing originals"
+  ],
+  "ci": {
+    "code_commit": "fefd3eb",
+    "status": "passed",
+    "url": "https://github.com/samskiezz/sherlock-osint/actions/runs/38808765146"
+  },
+  "final_readiness": {
+    "gateway_healthy": true,
+    "gateway_dependencies_ready": true,
+    "core_healthy": true,
+    "erps_healthy": true,
+    "anonymous_gateway_denied": true,
+    "fixture_accounts_retired": 4,
+    "fixture_tokens_retired": true,
+    "gateway_audit_chain_valid": true,
+    "erps_audit_chain_valid": true,
+    "owned_test_databases_remaining": 0,
+    "owned_security_limiter_keys_remaining": 0,
+    "audit_tool_build_directory_removed": true,
+    "free_disk_mib": 2692
+  }
+}
