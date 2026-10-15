@@ -188,6 +188,13 @@ def test_cross_origin_writes_and_bad_lengths_are_rejected(client, isolated_gatew
     assert client.post("/api/v1/auth/login", content="{}", headers={"Content-Length": "invalid"}).status_code == 413
 
 
+def test_chunked_body_cannot_bypass_gateway_upload_limit(client):
+    # This runs only against the owned in-process gateway, not the live account.
+    chunk = b"x" * (64 * 1024)
+    response = client.post("/api/v1/auth/login", content=(chunk for _ in range(27 * 16)))
+    assert response.status_code == 413
+
+
 def test_authentication_fails_closed_when_limiter_is_unavailable(client, isolated_gateway):
     broker = isolated_gateway[3]
     token = login(client, isolated_gateway[-1])

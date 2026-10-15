@@ -26,6 +26,7 @@ from .models import (
     migrate,
 )
 from .audit import record, verify
+from .body_limit import RequestBodyLimit, MAX_REQUEST_BODY_BYTES
 from .security import (
     passwords,
     issue,
@@ -74,13 +75,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(
     title="SHERLOCK OSINT authenticated foundation", version="0.10.0", lifespan=lifespan
 )
+app.add_middleware(RequestBodyLimit)
 
 
 @app.middleware("http")
 async def access_log(request: Request, call_next: Any) -> Response:
     """Rate-limit access, prevent cross-origin writes, and hash-chain request metadata only."""
     length = request.headers.get("content-length", "0")
-    if not length.isdigit() or int(length) > 26 * 1024 * 1024:
+    if not length.isdigit() or int(length) > MAX_REQUEST_BODY_BYTES:
         return Response("Request exceeds 26 MiB gateway limit", status_code=413)
     if request.url.path != "/health":
         client_key = (

@@ -58,7 +58,7 @@ jobs:
           .venv/bin/python -m pytest -q tests/test_erps.py --junitxml=data/erps-tests.xml
       - name: Private access and bounded gateway adversarial checks
         run: |
-          .venv/bin/python -m pytest -q tests/test_private_site_access.py tests/test_gateway_security.py
+          .venv/bin/python -m pytest -q tests/test_private_site_access.py tests/test_gateway_body_limit.py tests/test_gateway_security.py
           npm --prefix hosting/private-access test
       - name: Frontend type check and production build
         working-directory: frontend

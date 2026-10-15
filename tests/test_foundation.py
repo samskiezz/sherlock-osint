@@ -49,8 +49,24 @@ def live():
             "id": created.json()["id"],
             "header": {"Authorization": "Bearer " + login.json()["access_token"]},
         }
-    yield c, admin, users
-    c.close()
+    try:
+        yield c, admin, users
+    finally:
+        # These are fixture-owned accounts, never the operator's administrator.
+        # Retire them even when an assertion fails; retain their audit history.
+        from foundation.models import Session, User
+        from foundation.audit import record
+        with Session.begin() as session:
+            retired = []
+            for fixture in users.values():
+                user = session.get(User, fixture["id"])
+                if user is not None and user.username == fixture["username"]:
+                    user.active = False
+                    user.token_version += 1
+                    retired.append(user.id)
+            if retired:
+                record(session, None, "test_accounts_retired", {"user_ids": retired})
+        c.close()
 
 
 def test_health_and_authentication_required(live):
