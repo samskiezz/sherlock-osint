@@ -6,13 +6,56 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub const MAX_MONOMIALS: usize = 4096;
 pub const MAX_FACTORS: usize = 256;
+pub const JSON_SAFE_INTEGER: u64 = 9_007_199_254_740_991;
+pub fn json_count(n: u64) -> serde_json::Value {
+    if n > JSON_SAFE_INTEGER {
+        serde_json::Value::String(n.to_string())
+    } else {
+        serde_json::Value::from(n)
+    }
+}
+fn serialize_coefficient<S: Serializer>(n: &u64, s: S) -> Result<S::Ok, S::Error> {
+    if *n > JSON_SAFE_INTEGER {
+        s.serialize_str(&n.to_string())
+    } else {
+        s.serialize_u64(*n)
+    }
+}
+fn deserialize_coefficient<'de, D: Deserializer<'de>>(d: D) -> Result<u64, D::Error> {
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Integer {
+        Number(u64),
+        Text(String),
+    }
+    match Integer::deserialize(d)? {
+        Integer::Number(n) => Ok(n),
+        Integer::Text(s)
+            if !s.is_empty() && s.len() <= 20 && s.bytes().all(|c| c.is_ascii_digit()) =>
+        {
+            s.parse().map_err(serde::de::Error::custom)
+        }
+        _ => Err(serde::de::Error::custom(
+            "coefficient must be a u64 integer or decimal string",
+        )),
+    }
+}
 pub type Witnesses = BTreeSet<BTreeSet<String>>;
+fn normalize_variable(var: &str) -> String {
+    uuid::Uuid::parse_str(var)
+        .map(|id| id.to_string())
+        .unwrap_or_else(|_| var.to_owned())
+}
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Polynomial(BTreeMap<Vec<String>, u64>);
 #[derive(Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Term {
     vars: Vec<String>,
+    #[serde(
+        serialize_with = "serialize_coefficient",
+        deserialize_with = "deserialize_coefficient"
+    )]
     coeff: u64,
 }
 #[derive(Serialize, Deserialize)]
@@ -54,7 +97,7 @@ impl Polynomial {
         Self(BTreeMap::from([(vec![], 1)]))
     }
     pub fn variable(var: impl Into<String>) -> Self {
-        Self(BTreeMap::from([(vec![var.into()], 1)]))
+        Self(BTreeMap::from([(vec![normalize_variable(&var.into())], 1)]))
     }
     fn insert(&mut self, mut vars: Vec<String>, coeff: u64) -> Result<()> {
         if coeff == 0 {
@@ -68,6 +111,7 @@ impl Polynomial {
             vars.iter().all(|v| !v.is_empty() && v.len() <= 128),
             "invalid provenance variable"
         );
+        vars = vars.iter().map(|v| normalize_variable(v)).collect();
         vars.sort();
         let n = self
             .0
@@ -124,10 +168,11 @@ impl Polynomial {
         })
     }
     pub fn retract(&self, var: &str) -> Self {
+        let var = normalize_variable(var);
         Self(
             self.0
                 .iter()
-                .filter(|(v, _)| !v.iter().any(|x| x == var))
+                .filter(|(v, _)| !v.iter().any(|x| x == &var))
                 .map(|(v, c)| (v.clone(), *c))
                 .collect(),
         )
@@ -201,6 +246,15 @@ mod tests {
                 .unwrap();
         assert!(p.add(&p).is_err());
         assert!(p.multiply(&p).is_err());
+        assert_eq!(
+            serde_json::to_value(&p).unwrap()["monomials"][0]["coeff"],
+            u64::MAX.to_string()
+        );
+        assert_eq!(
+            serde_json::from_value::<Polynomial>(serde_json::to_value(&p).unwrap()).unwrap(),
+            p
+        );
+        assert_eq!(json_count(p.count().unwrap()), u64::MAX.to_string());
         let zero: Polynomial =
             serde_json::from_str(r#"{"monomials":[{"vars":["x"],"coeff":0}]}"#).unwrap();
         assert!(!zero.boolean());

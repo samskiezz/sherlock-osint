@@ -4,11 +4,16 @@ Validated on 15 October 2026 in the cloud workspace. This record distinguishes
 executed checks, a resolved test-contract mismatch, and blocked external checks.
 It does not certify every capability of the thesis or the existing platform.
 
+The first published implementation also passed the [GitHub Actions verification
+run](https://github.com/samskiezz/sherlock-osint/actions/runs/38733428038), including
+its separately provisioned Postgres 16 acceptance tests. Subsequent code changes
+run the same workflow; documentation-only updates do not rerun it.
+
 | Check | Result |
 | --- | --- |
 | Rust workspace tests | 14 passed, including an 8,385-pair multi-batch scoring parity test |
 | Rust formatting / Clippy with warnings denied | Passed |
-| ERPS Python acceptance tests | 14 passed; real Rust process and temporary Postgres database |
+| ERPS Python acceptance tests | 15 passed; real Rust process and temporary Postgres database |
 | Existing local backend regression | 490 current cases covered across module and focused runs; details below |
 | Foundation integration | 4 passed, 3 failed due to missing historical fixtures and public DNS |
 | Available retrieval tests | 5 passed; 6 model/search checks not run |
@@ -47,7 +52,7 @@ The implementation retains network-disabled extraction, immutable originals,
 read-only mounts/root, dropped capabilities and the independent 90-second
 parser execution limit. The core's creation timeout is bounded to 45–300 seconds.
 
-Across current Python coverage, 513 cases passed, three external integration
+Across current Python coverage, 514 cases passed, three external integration
 cases remain failed, and six retrieval cases were not run. Rust, browser,
 container and Worker checks are reported separately rather than mixed into
 that Python count.

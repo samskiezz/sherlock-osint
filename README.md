@@ -8,6 +8,7 @@ Python ingestion, and the **Entity resolution** browser. See [the ERPS build and
 operating guide](docs/erps.md) for commands, API behavior, tests, and measured limits.
 This addition is a bounded implementation; it does not establish million-mention
 performance or the blueprint's example accuracy and latency figures.
+Current checks and external blockers are recorded in the [ERPS validation record](docs/erps-validation.md).
 
 The current release runs at **http://127.0.0.1:8010** in the provided Linux workspace. It opens on **Evidence board**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
 

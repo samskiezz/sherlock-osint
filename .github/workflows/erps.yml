@@ -1,7 +1,12 @@
 name: ERPS verification
 on:
   push:
+    paths-ignore: ["docs/**", "README.md"]
   pull_request:
+    paths-ignore: ["docs/**", "README.md"]
+concurrency:
+  group: erps-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -21,6 +26,7 @@ jobs:
       CARGO_BUILD_JOBS: 2
     steps:
       - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

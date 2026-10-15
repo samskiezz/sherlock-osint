@@ -124,6 +124,20 @@ def test_atomic_rollback_and_identity_conflict(client):
     assert client.post("/resolve", json={"mentions": [], "unexpected": 1}).status_code == 422
 
 
+def test_large_coefficients_and_counts_remain_exact_in_json(client):
+    largest=18446744073709551615
+    source=str(uuid.uuid4())
+    m=mention(source=source,provenance={"monomials":[{"vars":[source.upper()],"coeff":largest}]})
+    entity=resolved(client,[m])["entities"][0]
+    assert entity["provenance"]["monomials"][0]["coeff"]==str(largest)
+    lineage=client.get("/lineage/"+entity["id"]).json()
+    assert lineage["count"]==str(largest)
+    assert lineage["why"]==[[source]] and lineage["boolean"] is True
+    assert resolved(client,[m])["entities"][0]["id"]==entity["id"]
+    retracted=client.post("/deletion",json={"source_var":source})
+    assert retracted.status_code==200 and retracted.json()["entities"]==[]
+
+
 def test_strong_identifiers_temporal_conflicts_and_constraints(client):
     a = mention("Alias One", attributes={"passport": "P1"})
     b = mention("Different Name", attributes={"passport": "P1"})

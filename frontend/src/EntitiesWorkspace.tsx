@@ -22,7 +22,7 @@ type Lineage = {
   support: string[];
   why: string[][];
   minimal_witnesses: string[][];
-  count: number;
+  count: number | string;
   boolean: boolean;
   how: unknown;
   decisions: { a: string; b: string; score: number; decision: string }[];
@@ -370,7 +370,11 @@ export default function EntitiesWorkspace() {
             disabled={busy || !ready || !raw}
             onClick={() =>
               void act(async () => {
-                const result = await post("/erps/resolve", JSON.parse(raw));
+                const result = await api("/erps/resolve", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: raw,
+                });
                 await load();
                 clearInspection();
                 setNotice(

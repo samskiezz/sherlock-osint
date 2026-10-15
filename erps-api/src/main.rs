@@ -282,7 +282,7 @@ async fn lineage(State(a): State<App>, h: HeaderMap, Path(id): Path<Uuid>) -> Re
     .await?;
     tx.commit().await?;
     Ok(Json(
-        json!({"entity_id":id,"how":poly,"support":poly.support(),"why":poly.why(),"minimal_witnesses":poly.minimal_witnesses(),"boolean":poly.boolean(),"count":poly.count()?,"semantics":"membership evidence; clustering decisions are listed separately","decisions":edges}),
+        json!({"entity_id":id,"how":poly,"support":poly.support(),"why":poly.why(),"minimal_witnesses":poly.minimal_witnesses(),"boolean":poly.boolean(),"count":erps_core::provenance::json_count(poly.count()?),"semantics":"membership evidence; clustering decisions are listed separately","decisions":edges}),
     ))
 }
 #[derive(Deserialize)]

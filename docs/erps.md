@@ -114,11 +114,17 @@ constraint checker; it performs no DL-Lite entailment.
 ## Provenance and retraction
 
 JSON uses `{"monomials":[{"vars":["<source UUID>","<source UUID>"],"coeff":2}]}`.
-Repeated variables encode exponents. Deserialization sorts factors, combines
+Repeated variables encode exponents. UUID variable spellings are canonicalized,
+so uppercase or unhyphenated source labels retract through the same UUID.
+Deserialization sorts factors, combines
 duplicate terms and removes zero coefficients. Arithmetic uses checked u64
 coefficients. Overflow, more than 4,096 monomials or more than 256 factors
 per monomial rejects the operation; the service never substitutes a different
 polynomial or support-only approximation.
+Coefficients and counts above JavaScript's safe integer range are emitted as
+decimal strings, preserving the complete u64 value in the browser. Coefficient
+inputs accept integers or decimal strings. The structured-input UI forwards
+the original JSON text, avoiding precision loss before the server receives it.
 
 `GET /lineage/:id` returns `how`, `support`, `why`, `minimal_witnesses`,
 `boolean`, `count`, and candidate `decisions`. Why contains all witness sets

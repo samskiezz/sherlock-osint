@@ -171,8 +171,9 @@ pub async fn insert_mention(tx: &mut Tx<'_>, w: Uuid, m: &Mention) -> Result<()>
             .fetch_optional(&mut **tx)
             .await?;
     if let Some(prior) = existing {
+        let previous: Mention = serde_json::from_value(prior)?;
         ensure!(
-            prior == payload,
+            previous == *m,
             "mention ID already exists with different content"
         );
         return Ok(());
