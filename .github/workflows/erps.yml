@@ -13,6 +13,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     services:
+      redis:
+        image: redis:8.2.1-alpine
+        ports: ["56379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 3s --health-timeout 3s --health-retries 10
       postgres:
         image: postgres:16
         env:
@@ -23,6 +27,7 @@ jobs:
         options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
     env:
       DATABASE_URL: postgresql+psycopg://postgres:ci-local-only@127.0.0.1:55432/sherlock
+      CELERY_BROKER_URL: redis://127.0.0.1:56379/0
       CARGO_BUILD_JOBS: 2
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +43,8 @@ jobs:
       - name: Python test dependencies
         run: |
           python -m venv .venv
-          .venv/bin/pip install pytest httpx fastapi 'psycopg[binary]'
+          .venv/bin/python -m pip install --upgrade pip==26.2
+          .venv/bin/pip install -r foundation/requirements.lock pytest==9.0.3
       - name: Rust formatting, lint, tests, and executable
         run: |
           cargo fmt --all -- --check
@@ -50,9 +56,9 @@ jobs:
           mkdir -p data
           .venv/bin/python scripts/setup_erps.py
           .venv/bin/python -m pytest -q tests/test_erps.py --junitxml=data/erps-tests.xml
-      - name: Private access startup and relay protocol checks
+      - name: Private access and bounded gateway adversarial checks
         run: |
-          .venv/bin/python -m pytest -q tests/test_private_site_access.py
+          .venv/bin/python -m pytest -q tests/test_private_site_access.py tests/test_gateway_security.py
           npm --prefix hosting/private-access test
       - name: Frontend type check and production build
         working-directory: frontend
