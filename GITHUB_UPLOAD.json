@@ -1,0 +1,28 @@
+{
+  "requested_action": "Upload the current SHERLOCK OSINT source to GitHub",
+  "authorised": true,
+  "updated_utc": "2026-10-15T08:09:01.024909+00:00",
+  "status": "BLOCKED_REPOSITORY_CREATION_PERMISSION",
+  "uploaded": false,
+  "connected_account": "samskiezz",
+  "intended_repository": "samskiezz/sherlock-osint",
+  "repository_exists": false,
+  "visibility": "private",
+  "github_error": {
+    "status": 403,
+    "message": "Resource not accessible by integration",
+    "operation": "POST /user/repos"
+  },
+  "required_next_step": "Create an empty private repository and enable access through the GitHub connection, or supply an existing destination.",
+  "completion_verified": false,
+  "excludes": [
+    "credentials",
+    "local evidence vault",
+    "case databases",
+    "original evidence files",
+    "generated investigation outputs",
+    "model weights",
+    "original workspace Git history"
+  ],
+  "source_delivery": "A clean source snapshot; this is not a complete evidence archive or a claim that the full platform specification is implemented."
+}

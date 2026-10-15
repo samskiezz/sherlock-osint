@@ -1,0 +1,733 @@
+{
+  "scope": "Full user thread: original 18-section specification, repeated automation/OSINT/cipher requests, expanded tool specification, UI corrections and expanded pasted dossier. This is a gap register, not a claim of completion.",
+  "items": [
+    {
+      "id": "UX-01",
+      "requirement": "Bulletin board first; clear breakdown directly underneath",
+      "status": "VERIFIED",
+      "evidence": "artifacts/under-board-browser.json",
+      "remaining": "Evidence board is default; case breakdown and dossier verification are directly below the real canvas. Browser-tested."
+    },
+    {
+      "id": "UX-02",
+      "requirement": "Every case thread exposes connections, exact proof and saved analysis",
+      "status": "VERIFIED",
+      "evidence": "artifacts/case-breakdown-browser.json",
+      "remaining": "Original case threads plus the EU project are accessible under the board; unsupported connections remain flagged."
+    },
+    {
+      "id": "UX-03",
+      "requirement": "Analysis/collection tabs open on automatic results, with optional configuration",
+      "status": "VERIFIED",
+      "evidence": "artifacts/briefing-automatic-browser.json",
+      "remaining": "12 tabs tested; not every method is automatically applicable"
+    },
+    {
+      "id": "UX-04",
+      "requirement": "Show every uploaded dossier claim with independent verification state",
+      "status": "PARTIAL",
+      "evidence": "artifacts/expanded-dossier-verification.json",
+      "remaining": "All 141 claim units have source-coverage assessments: 3 supported, 10 partly supported, 128 not verified. Missing originals are not fabricated."
+    },
+    {
+      "id": "UX-05",
+      "requirement": "Clickable PDF pages, original photographs and source passages",
+      "status": "VERIFIED",
+      "evidence": "artifacts/private-access-live-verification.json",
+      "remaining": "Original PDF and image bytes hash-verified through private HTTPS access"
+    },
+    {
+      "id": "UX-06",
+      "requirement": "Cork/dark themes, saved graph layouts, graph navigation, undo/redo",
+      "status": "PARTIAL",
+      "evidence": "frontend/src/main.tsx",
+      "remaining": "Implemented; complete feature-by-feature acceptance not rerun in current audit"
+    },
+    {
+      "id": "UX-07",
+      "requirement": "Thousands of entities: clustering, collapse, lasso, spatial search and performance benchmark",
+      "status": "PARTIAL",
+      "evidence": "frontend/src/main.tsx",
+      "remaining": "Virtualized visible canvas exists; full scale/cluster acceptance remains unverified"
+    },
+    {
+      "id": "UX-08",
+      "requirement": "Dedicated cards and full inspectors for every requested media/entity type",
+      "status": "PARTIAL",
+      "evidence": "frontend/src/main.tsx",
+      "remaining": "PDF/image/text/code/media support exists; complete 13-card acceptance not established"
+    },
+    {
+      "id": "ACQ-01",
+      "requirement": "Persistent original-file acquisition, retries, rate limits, hashes and visible failures",
+      "status": "VERIFIED",
+      "evidence": "artifacts/expanded-dossier-import.json",
+      "remaining": "Actual public source jobs queued and processed; per-site failures retained"
+    },
+    {
+      "id": "ACQ-02",
+      "requirement": "Recurring research/cron with pause, resume, cancellation and durable progress",
+      "status": "PARTIAL",
+      "evidence": "backend/research.py",
+      "remaining": "Persistent research workers and a new 15-minute official-source watch run. Full restart/cancel matrix not rerun in this audit."
+    },
+    {
+      "id": "ACQ-03",
+      "requirement": "Browser acquisition, resumable transfers, archive fallback and availability monitoring",
+      "status": "PARTIAL",
+      "evidence": "backend/discovery.py",
+      "remaining": "HTTP/archive acquisition exists; every requested browser/resume/provider scenario not validated"
+    },
+    {
+      "id": "ACQ-04",
+      "requirement": "Legally acquired originals, immutable vault and derivative separation",
+      "status": "VERIFIED",
+      "evidence": "backend/sandbox.py",
+      "remaining": "Source/derivative integrity and sandbox tests in existing regression artifacts"
+    },
+    {
+      "id": "ACQ-05",
+      "requirement": "Import all prior SQLite databases, manifests, source files and conflicting reports",
+      "status": "PARTIAL",
+      "evidence": "backend/case_archive.py",
+      "remaining": "Supplied dossier imported; unavailable prior user files cannot be presumed recovered"
+    },
+    {
+      "id": "ACQ-06",
+      "requirement": "Live X/Twitter feeds and comprehensive historical feed analysis",
+      "status": "BLOCKED",
+      "evidence": "backend/social_watch.py",
+      "remaining": "No authorised X API credential; imported public archives supported; all-feed coverage not claimed"
+    },
+    {
+      "id": "ACQ-07",
+      "requirement": "Live onion research and preservation through Tor",
+      "status": "BLOCKED",
+      "evidence": "backend/onion.py",
+      "remaining": "Current environment has no configured Tor transport/network access"
+    },
+    {
+      "id": "ACQ-08",
+      "requirement": "Every existing photograph on the web and hidden/missing-file recovery",
+      "status": "UNBOUNDED REQUEST",
+      "evidence": "backend/media_reports.py",
+      "remaining": "Growing bounded corpus; exhaustive internet coverage and inaccessible files cannot be certified"
+    },
+    {
+      "id": "ACQ-09",
+      "requirement": "Public disclosure/leak research without private-account/access-control bypass",
+      "status": "PARTIAL",
+      "evidence": "backend/research.py",
+      "remaining": "Public-source scheduled discovery exists; no private or unauthorised collection"
+    },
+    {
+      "id": "DATA-01",
+      "requirement": "Continuously growing file/database/search collection with actual originals",
+      "status": "VERIFIED",
+      "evidence": "backend/vault.py",
+      "remaining": "Live worker heartbeats, preserved originals and extraction/search records"
+    },
+    {
+      "id": "DATA-02",
+      "requirement": "PostgreSQL for all case records, Neo4j graph and Qdrant semantic index",
+      "status": "PARTIAL",
+      "evidence": "backend/retrieval.py",
+      "remaining": "Postgres gateway, Elasticsearch/Qdrant and SQLite case vault; Neo4j migration not implemented"
+    },
+    {
+      "id": "DATA-03",
+      "requirement": "Temporal graph, entity resolution, communities, paths and contradiction discovery",
+      "status": "PARTIAL",
+      "evidence": "backend/workspaces.py",
+      "remaining": "Source-backed graph analytics exist; automatic identity resolution and broad contradiction discovery remain incomplete"
+    },
+    {
+      "id": "DATA-04",
+      "requirement": "Keyword/BM25, semantic search and graph traversal in one natural-language interface",
+      "status": "PARTIAL",
+      "evidence": "backend/retrieval.py",
+      "remaining": "Search adapters exist; all natural-language examples not accepted end-to-end"
+    },
+    {
+      "id": "AI-01",
+      "requirement": "Durable specialist investigator tasks with tool receipts, dependencies and failures",
+      "status": "PARTIAL",
+      "evidence": "backend/automation.py",
+      "remaining": "Durable workflows and bounded tool execution; specialist-agent roles are not all independently demonstrated"
+    },
+    {
+      "id": "AI-02",
+      "requirement": "Independent red-team, scientific review and evidence-auditor conclusions",
+      "status": "PARTIAL",
+      "evidence": "backend/investigator.py",
+      "remaining": "Citation auditing and competing hypotheses exist; independent scientific/model validation incomplete"
+    },
+    {
+      "id": "AI-03",
+      "requirement": "At least 200 individually verified AI features and functions",
+      "status": "PARTIAL",
+      "evidence": "backend/automation.py",
+      "remaining": "Callable catalogue is not 200 distinct AI agents; model/deterministic/operational counts must remain separate"
+    },
+    {
+      "id": "AI-04",
+      "requirement": "Claude API, local Ollama and optional external model adapters",
+      "status": "PARTIAL",
+      "evidence": "backend/models.py",
+      "remaining": "Local model works; external adapters need configured credentials and separate validation"
+    },
+    {
+      "id": "AI-05",
+      "requirement": "Source dependence, information-gain collection, cognitive-bias controls and retained dissent",
+      "status": "PARTIAL",
+      "evidence": "backend/tradecraft.py",
+      "remaining": "Several structured methods exist; full automatic fusion and calibration not completed"
+    },
+    {
+      "id": "FORENSICS-01",
+      "requirement": "PDF extraction, OCR, metadata, page coordinates and originals",
+      "status": "VERIFIED",
+      "evidence": "backend/sandbox.py",
+      "remaining": "Existing sandbox/forensic tests and real acquired PDF previews"
+    },
+    {
+      "id": "FORENSICS-02",
+      "requirement": "Image OCR, EXIF, channels, hashes, differences, diagnostics and comparisons",
+      "status": "PARTIAL",
+      "evidence": "backend/visual_intelligence.py",
+      "remaining": "Actual saved image reviews exist; universal authenticity/hidden-image detection not claimed"
+    },
+    {
+      "id": "FORENSICS-03",
+      "requirement": "Video/audio transcripts, scenes, frames, waveform and spectrogram",
+      "status": "PARTIAL",
+      "evidence": "backend/sandbox.py",
+      "remaining": "Processing paths exist; full requested real-media end-to-end acceptance incomplete"
+    },
+    {
+      "id": "FORENSICS-04",
+      "requirement": "Static repository/binary analysis, disassembly, blame, embedded resources",
+      "status": "PARTIAL",
+      "evidence": "backend/automation_tools.py",
+      "remaining": "Static text/code analysis exists; full Ghidra/LIEF/YARA-X/firmware workflow incomplete"
+    },
+    {
+      "id": "FORENSICS-05",
+      "requirement": "Isolated unknown-file parsing; unknown binaries require approval to execute",
+      "status": "VERIFIED",
+      "evidence": "backend/sandbox.py",
+      "remaining": "No acquired code execution; resource/network/read-only guards retained"
+    },
+    {
+      "id": "FORENSICS-06",
+      "requirement": "Scientific validation of steganography/edit/face-identification claims",
+      "status": "PENDING",
+      "evidence": "backend/visual_intelligence.py",
+      "remaining": "Heuristic indicators remain provisional; biometric identity matching is not asserted"
+    },
+    {
+      "id": "CRYPTO-01",
+      "requirement": "Automatic decoding using existing engines rather than per-item manual selection",
+      "status": "PARTIAL",
+      "evidence": "backend/established_decode.py",
+      "remaining": "CyberChef Magic and typed automatic profiles exist; bounded candidate search, not universal decryption"
+    },
+    {
+      "id": "CRYPTO-02",
+      "requirement": "Gematria/Grimatria mappings, Scrabble, classical ciphers and reproducible recipes",
+      "status": "PARTIAL",
+      "evidence": "backend/gematria.py",
+      "remaining": "Saved calculations and mappings exist; every proposed method still needs method-specific acceptance"
+    },
+    {
+      "id": "CRYPTO-03",
+      "requirement": "Negative controls, transformation counts, holdout tests and multiple-testing discipline",
+      "status": "PARTIAL",
+      "evidence": "backend/cryptanalysis.py",
+      "remaining": "Controls exist; complete statistical validation across every method/corpus remains incomplete"
+    },
+    {
+      "id": "CRYPTO-04",
+      "requirement": "Break all modern encryption or prove messages from readable/numerical coincidences",
+      "status": "NOT A VERIFIED CAPABILITY",
+      "evidence": "backend/crypto_lab.py",
+      "remaining": "No such completion claim is permitted"
+    },
+    {
+      "id": "CASE-01",
+      "requirement": "Caltech/JPL biography, IJK, Fluid Synchrony, C2, graduation and public attribution",
+      "status": "PARTIAL",
+      "evidence": "backend/dossier_verification.py",
+      "remaining": "Named Caltech caption acquired; expanded biographical assertions need individual primary support"
+    },
+    {
+      "id": "CASE-02",
+      "requirement": "Bohrdom/First Law/Steam depot/binary and historical metadata comparisons",
+      "status": "PARTIAL",
+      "evidence": "backend/patents.py",
+      "remaining": "Steam metadata/artwork/archives preserved; unreleased builds and binary-change assertions not verified"
+    },
+    {
+      "id": "CASE-03",
+      "requirement": "Mondaloy patent family, inventors, priority dates, citations and claims",
+      "status": "PARTIAL",
+      "evidence": "backend/patents.py",
+      "remaining": "Original patent PDFs and catalogue records acquired; identity merges and technical-performance claims require separate proof"
+    },
+    {
+      "id": "CASE-04",
+      "requirement": "EU Time Machine versus physical time travel and Quantum Flagship",
+      "status": "PARTIAL",
+      "evidence": "artifacts/expanded-originals-board.json",
+      "remaining": "Official CORDIS grant and project site acquired; digitisation purpose and EPFL coordination source-backed; broader connections remain unverified."
+    },
+    {
+      "id": "CASE-05",
+      "requirement": "Henry Martinez post, timestamp, historic ownership and purported prediction",
+      "status": "PARTIAL",
+      "evidence": "backend/prediction_audit.py",
+      "remaining": "Identifier-format time is reproducible; post text/ownership/pre-event meaning not authenticated"
+    },
+    {
+      "id": "CASE-06",
+      "requirement": "Proposed scientist roster, deaths/disappearances and alleged common research team",
+      "status": "PENDING",
+      "evidence": "backend/dossier_verification.py",
+      "remaining": "Supplied roster is secondary, includes fifteen names; common team not established"
+    },
+    {
+      "id": "CASE-07",
+      "requirement": "Criminal complaint, affidavit, docket/transcripts, plea and court audio/video",
+      "status": "PARTIAL",
+      "evidence": "artifacts/expanded-originals-board.json",
+      "remaining": "Actual official DOJ complaint and affidavit acquired and attached. Supplied CourtListener pages returned 403; original hearing audio and incident video not acquired."
+    },
+    {
+      "id": "CASE-08",
+      "requirement": "AI-fake claims, original image attribution and repeatable forensic conclusions",
+      "status": "PARTIAL",
+      "evidence": "backend/visual_explanation.py",
+      "remaining": "AFP fact-check and comparison originals preserved; independent authentication of every named fake not completed"
+    },
+    {
+      "id": "TIME-01",
+      "requirement": "Interactive timeline with separate publication/capture/retrieval dates and uncertainty",
+      "status": "PARTIAL",
+      "evidence": "backend/workspaces.py",
+      "remaining": "Existing timeline works; all uncertainty/zoom/prediction examples not accepted end-to-end"
+    },
+    {
+      "id": "MAP-01",
+      "requirement": "Source-backed public geospatial events, historical overlays and lawful routing",
+      "status": "PARTIAL",
+      "evidence": "frontend/src/MapWorkspace.tsx",
+      "remaining": "Public source-linked map exists; historical overlays and route analytics incomplete"
+    },
+    {
+      "id": "SCIENCE-01",
+      "requirement": "500 individually source-verified executable tradecraft methods",
+      "status": "PARTIAL",
+      "evidence": "backend/tradecraft.py",
+      "remaining": "Executable methods, guided techniques and reference families are distinct; no 500-method completion claim"
+    },
+    {
+      "id": "SCIENCE-02",
+      "requirement": "CIA/NSA/public doctrine, knowledge-graph patents and validated implementation",
+      "status": "PARTIAL",
+      "evidence": "backend/tradecraft.py",
+      "remaining": "Some primary references acquired; full patent-method implementation/benchmark not established"
+    },
+    {
+      "id": "SCIENCE-03",
+      "requirement": "DNA, ballistics, toxicology, interviews and physical laboratory techniques",
+      "status": "REFERENCE / INPUT DEPENDENT",
+      "evidence": "backend/tradecraft.py",
+      "remaining": "Cannot be implemented as validated laboratory conclusions from unrelated public webpages"
+    },
+    {
+      "id": "EXPORT-01",
+      "requirement": "Actual-file ZIP, manifests, hashes, JSON/CSV and case reports",
+      "status": "PARTIAL",
+      "evidence": "backend/case_archive.py",
+      "remaining": "Export code exists; every requested PDF/DOCX/GraphML/GEXF/high-resolution board format not fully accepted"
+    },
+    {
+      "id": "SECURITY-01",
+      "requirement": "Authentication/RBAC, audit hash chain, secrets outside source and origin guards",
+      "status": "PARTIAL",
+      "evidence": "foundation",
+      "remaining": "Existing controls and tests; enterprise SSO/MFA/dependency/security certification not complete"
+    },
+    {
+      "id": "SECURITY-02",
+      "requirement": "Backups, recovery, storage budgets and persistent always-on deployment",
+      "status": "PARTIAL",
+      "evidence": "scripts/run_platform.py",
+      "remaining": "Supervisor and snapshots exist; off-host recovery/reboot-independent private relay not fully deployed"
+    },
+    {
+      "id": "DEPLOY-01",
+      "requirement": "Working private HTTPS access to actual originals and application",
+      "status": "VERIFIED",
+      "evidence": "artifacts/private-access-live-verification.json",
+      "remaining": "Owner-private relay is workspace-dependent; must remain running"
+    },
+    {
+      "id": "DEPLOY-02",
+      "requirement": "Apple Silicon Mac dependency install, start-up and acceptance on user Mac",
+      "status": "BLOCKED",
+      "evidence": "README.md",
+      "remaining": "Current environment is Linux; no access to or verification on the user Mac"
+    },
+    {
+      "id": "DEPLOY-03",
+      "requirement": "Upload current source to GitHub, as subsequently requested",
+      "status": "BLOCKED BY GITHUB REPOSITORY CREATION PERMISSION",
+      "evidence": "GITHUB_UPLOAD.json",
+      "remaining": "Create an empty private repository and enable access through the GitHub connection, or supply an existing destination."
+    },
+    {
+      "id": "QUALITY-01",
+      "requirement": "Flawless, exhaustive future prediction and all-world-method coverage",
+      "status": "NOT A VERIFIED CAPABILITY",
+      "evidence": "artifacts/delivery-readiness.json",
+      "remaining": "Finite tests and source coverage do not establish these universal claims"
+    }
+  ],
+  "third_party_integrations": [
+    {
+      "name": "OpenOSINT",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "PhantomSignal",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "SpiderFoot poppopjmp fork",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "sn0int",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Maigret",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Holehe",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "TruffleHog",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "GLiNER",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "DeepFace",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "InsightFace",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "TheHive",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Cortex",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "IntelOwl",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Estorides",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "PANO",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Crypttrace",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "BitCraft",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "GEOLENS",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Osixr",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Phomber",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Darkelf OSINT Lite",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "SYNINT",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "timelineviz",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "pyreps",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Waybackpy",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "APTRS",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Robin",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Taranis AI",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "DarkFox",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Prying Deep",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "TerraScout",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Osiris",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Shodan",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Wappalyzer",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "DoWhy",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "PyOD",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Prophet",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "SHAP",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "LIME",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Presidio",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Argos Translate",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "EasyOCR",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Whisper",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "MISP",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "OpenCTI",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "YARA-X",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Sigma",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "MITRE ATT&CK",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Casbin",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "PyOTP",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "BorgBackup/restic",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "ModSecurity",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Snort/Suricata",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "SAML SSO",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "NetworKit",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Neo4j",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "MinIO",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Docling",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Apache Tika",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Ghidra",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "binwalk",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "LIEF",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Capstone",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "tree-sitter",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    },
+    {
+      "name": "Unstructured",
+      "status": "NOT VERIFIED AS INTEGRATED",
+      "next_action": "Verify authenticity, licence, compatibility and a real adapter acceptance test before claiming integration."
+    }
+  ],
+  "execution": "Existing acquisition, scheduled-research, compatible-analysis and dossier-candidate workers continue while the workspace runs. This is not a claim that the assistant keeps editing code after its turn ends.",
+  "github_push": "Authorised by the latest explicit upload request; destination creation blocked by GitHub HTTP 403. See GITHUB_UPLOAD.json.",
+  "latest_validation": {
+    "backend_tests": 507,
+    "warnings": 186,
+    "full_run": "artifacts/platform-regression-under-board.log",
+    "browser": "artifacts/under-board-browser.json",
+    "completion_claim": false
+  }
+}

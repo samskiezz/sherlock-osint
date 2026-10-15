@@ -1,0 +1,55 @@
+import {chromium} from 'playwright';
+import {writeFile} from 'node:fs/promises';
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+try {
+ const page=await browser.newPage({viewport:{width:1800,height:1200}});const errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:8000',{waitUntil:'domcontentloaded'});
+ const methods=(await (await page.request.get('http://127.0.0.1:8000/api/tradecraft')).json()).methods;
+ const boards=await (await page.request.get('http://127.0.0.1:8000/api/boards')).json();
+ const board=boards.find(b=>b.name.includes('named primary record'));
+ if(!board)throw Error('Acquired Caltech primary-source board missing');
+ await page.getByRole('button',{name:'Tradecraft & hypotheses',exact:true}).click();
+ await page.getByLabel('Executable method / guided workflow').selectOption(methods.find(m=>m.name==='Louvain community detection').id);
+ await page.getByLabel('Analyse sourced board relationships').selectOption(board.id);
+ await page.getByRole('button',{name:'Execute & preserve analysis'}).click();
+ await page.locator('.experiment-result').waitFor();
+ await page.waitForFunction(()=>document.querySelector('.experiment-result')?.textContent.includes('NetworkX 3.7'));
+ await page.getByRole('button',{name:'Monitor this sourced graph every 15 minutes'}).click();
+ await page.getByRole('button',{name:'Pause monitor',exact:true}).first().waitFor();
+ await page.locator('.page-scroll').evaluate(e=>e.scrollTop=0);
+ await page.screenshot({path:'../artifacts/source-graph-analysis-v7.png',fullPage:true});
+ await page.getByLabel('Executable method / guided workflow').selectOption(methods.find(m=>m.name==='Kolmogorov–Smirnov testing').id);
+ await page.getByRole('button',{name:'Execute & preserve analysis'}).click();
+ await page.waitForFunction(()=>document.querySelector('.experiment-result')?.textContent.includes('statistic_D'));
+ const ks=await page.locator('.experiment-result').innerText();if(!ks.includes('"statistic_D": 1'))throw Error('Distribution analysis incorrect');
+ await page.screenshot({path:'../artifacts/distribution-analysis-v7.png',fullPage:true});
+ await page.getByRole('button',{name:'Cipher laboratory',exact:true}).click();
+ await page.getByLabel('Transformation · 52 methods').selectOption('hill2');
+ await page.getByLabel('key',{exact:true}).fill('3,3,2,5');
+ await page.getByLabel('Exact original input').fill('HIAT');
+ await page.getByLabel('Unrelated negative control').fill('ABCD');
+ await page.getByRole('button',{name:'Run & preserve experiment'}).click();
+ await page.waitForFunction(()=>document.querySelector('.experiment-result')?.textContent.includes('HELP'));
+ await page.screenshot({path:'../artifacts/hill-cipher-controls-v7.png',fullPage:true});
+ await page.getByLabel('Transformation · 52 methods').selectOption('bifid');
+ await page.getByLabel('square_keyword',{exact:true}).fill('SECRET');
+ await page.getByLabel('period',{exact:true}).fill('7');
+ if(await page.getByLabel('period',{exact:true}).inputValue()!=='7')throw Error('Period control missing');
+ await page.getByLabel('Transformation · 52 methods').selectOption('adfgx');
+ await page.getByLabel('square_keyword',{exact:true}).fill('EXAMPLE');
+ if(await page.getByLabel('square_keyword',{exact:true}).inputValue()!=='EXAMPLE')throw Error('Square control missing');
+ await page.getByRole('button',{name:'Growing database',exact:true}).click();
+ await page.getByRole('button',{name:'Verify audit chain',exact:true}).click();
+ const audit=await (await page.request.get('http://127.0.0.1:8000/api/audit/verify')).json();
+ if(!audit.valid)throw Error('Live audit chain failed');
+ for(const format of ['pdf','docx']){
+  const downloadPromise=page.waitForEvent('download');
+  await page.locator(`a[href="/api/export/${format}"]`).click();
+  const download=await downloadPromise;
+  await download.saveAs(`../artifacts/looking-glass-report-v7.${format}`);
+ }
+ if(errors.length)throw Error(errors.join('\n'));
+ await writeFile('../artifacts/operational-browser-v7.json',JSON.stringify({passed:true,javascript_errors:errors,real_source_board:board.id,louvain_library:'NetworkX 3.7',ks_known_fixture_D:1,hill_known_vector:'HIAT -> HELP',bifid_period_control:7,adfgx_square_control:true,scheduled_monitor_visible:true,live_audit_chain_valid:audit.valid,reports_downloaded:['PDF','DOCX']},null,2));
+ console.log('PASS: sourced graph, monitor, KS, cipher controls, audit chain and PDF/DOCX downloads; zero JavaScript errors');
+} finally {await browser.close();}

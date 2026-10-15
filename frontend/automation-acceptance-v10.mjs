@@ -1,0 +1,38 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+process.env.PLAYWRIGHT_BROWSERS_PATH ||= root+'.browsers';
+const { chromium }=await import('playwright');
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+try {
+ const page=await browser.newPage({viewport:{width:1820,height:1250}});const errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:8010',{waitUntil:'domcontentloaded'});
+ const credentials=JSON.parse(await readFile(root+'data/foundation-secrets/admin-login.json','utf8'));
+ await page.getByLabel('Username',{exact:true}).fill(credentials.username);
+ await page.getByLabel('Password',{exact:true}).fill(credentials.password);
+ await page.getByRole('button',{name:'Sign in',exact:true}).click();
+ await page.getByRole('button',{name:'Automation control',exact:true}).click();
+ await page.getByRole('heading',{name:'Automation control',exact:true,level:2}).waitFor();
+ await page.getByText('253',{exact:true}).waitFor();
+ await page.getByLabel('Automation source',{exact:true}).selectOption('EV-2bc448c8a80b');
+ await page.getByRole('checkbox').filter({visible:true}).last().check();
+ await page.getByRole('button',{name:'Queue tool execution',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('.automation-run-status .status')?.textContent==='COMPLETE',{},{timeout:90000});
+ const receipt=await page.locator('.automation-panel details pre').first().innerText();
+ const result=JSON.parse(receipt);
+ if(result.result.sources[0].evidence_id!=='EV-2bc448c8a80b'||!result.result.sources[0].original_sha256)throw Error('Browser execution did not bind the actual original');
+ await page.screenshot({path:root+'artifacts/automation-control-v10.png',fullPage:true});
+ await page.getByRole('button',{name:'Load source-triage workflow',exact:true}).click();
+ await page.getByRole('button',{name:'Save workflow',exact:true}).click();
+ await page.getByRole('button',{name:'Run saved workflow',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelectorAll('.automation-panel details').length===4&&document.querySelector('.automation-run-status .status')?.textContent==='COMPLETE',{},{timeout:90000});
+ const statuses=await page.locator('.automation-panel details summary').allTextContents();
+ if(!statuses.every(s=>s.includes('COMPLETE')))throw Error('Browser workflow has incomplete steps');
+ await page.getByRole('heading',{name:'Execution receipts',exact:true}).scrollIntoViewIfNeeded();
+ await page.locator('.automation-panel details').first().locator('summary').click();
+ await page.screenshot({path:root+'artifacts/automation-workflow-v10.png',fullPage:true});
+ if(errors.length)throw Error('Browser errors: '+errors.join('; '));
+ await writeFile(root+'artifacts/automation-browser-v10.json',JSON.stringify({authenticated:true,tool_count:253,real_source_bound_execution:true,source_id:'EV-2bc448c8a80b',source_sha256:result.result.sources[0].original_sha256,workflow_steps:statuses,console_errors:errors,screenshots:['automation-control-v10.png','automation-workflow-v10.png']},null,2));
+ console.log(JSON.stringify({authenticated:true,tool_count:253,workflow_steps:statuses.length,console_errors:errors.length}));
+} finally {await browser.close();}

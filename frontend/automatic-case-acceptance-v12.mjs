@@ -1,0 +1,36 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+process.env.PLAYWRIGHT_BROWSERS_PATH ||= root+'.browsers';
+const {chromium}=await import('playwright');
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+try{
+ const page=await browser.newPage({viewport:{width:1820,height:1400}}),errors=[],analysisPosts=[],evidenceLists=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ page.on('request',r=>{if(new URL(r.url()).pathname==='/api/evidence')evidenceLists.push(r.url())});
+ page.on('request',r=>{if(r.method()==='POST'&&/\/api\/(automation|autopilot|visual)/.test(new URL(r.url()).pathname))analysisPosts.push(r.url());});
+ await page.goto('http://127.0.0.1:8010',{waitUntil:'domcontentloaded'});
+ const credentials=JSON.parse(await readFile(root+'data/foundation-secrets/admin-login.json','utf8'));
+ await page.getByLabel('Username',{exact:true}).fill(credentials.username);
+ await page.getByLabel('Password',{exact:true}).fill(credentials.password);
+ await page.getByRole('button',{name:'Sign in',exact:true}).click();
+ await page.getByRole('heading',{name:'Investigation',level:1,exact:true}).waitFor();
+ await page.getByRole('heading',{name:'Investigation running',level:2,exact:true}).waitFor();
+ await page.getByRole('heading',{name:'Donald Trump: how the photograph enters the composite',level:2,exact:true}).waitFor({timeout:30000});
+ await page.waitForFunction(()=>document.querySelector('.case-explanation')?.textContent.includes('129 geometric inliers'));
+ await page.waitForFunction(()=>[...document.querySelectorAll('.case-image-sequence img')].length===4&&[...document.querySelectorAll('.case-image-sequence img')].every(i=>i.complete&&i.naturalWidth>0));
+ if(await page.locator('textarea:visible').count())throw Error('Manual input controls are visible on the default investigation view');
+ if(await page.locator('.execution-drawer:visible').count())throw Error('Execution log is cluttering the default view');
+ if(await page.locator('.workspace-body > aside:visible').count())throw Error('Inspector should open only on demand');
+ const primaryNavigation=await page.locator('.sidebar > nav button').allTextContents();
+ if(primaryNavigation.length!==5)throw Error('Primary navigation was not simplified');
+ await page.screenshot({path:root+'artifacts/automatic-case-v12.png',fullPage:true});
+ await page.locator('.case-audit summary').first().click();
+ await page.waitForFunction(()=>[...document.querySelectorAll('.case-reconstructions img')].every(i=>i.complete&&i.naturalWidth>0)&&document.querySelector('.case-publisher-match img')?.naturalWidth>0);
+ await page.locator('.case-audit').first().scrollIntoViewIfNeeded();
+ await page.screenshot({path:root+'artifacts/visual-proof-v12.png',fullPage:true});
+ if(evidenceLists.some(url=>!url.includes('summary=true')))throw Error('Default view unnecessarily downloaded the full evidence corpus');
+ if(errors.length||analysisPosts.length)throw Error(JSON.stringify({errors,analysisPosts}));
+ await writeFile(root+'artifacts/automatic-case-browser-v12.json',JSON.stringify({authenticated:true,default_view:'Investigation',no_manual_analysis_requests:true,compact_evidence_catalogue_used:true,analysis_post_requests:analysisPosts,primary_navigation:primaryNavigation,visible_image_sequence_panels:4,source_reported_subject:'Donald Trump',publisher_reference_geometric_inliers:129,reconstruction_and_residual_images_loaded:true,console_errors:errors,screenshots:['automatic-case-v12.png','visual-proof-v12.png']},null,2));
+ console.log(JSON.stringify({default_investigation:true,automatic_findings_visible:true,manual_analysis_requests:analysisPosts.length,console_errors:errors.length}));
+}finally{await browser.close();}

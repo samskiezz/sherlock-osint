@@ -1,0 +1,7 @@
+# Flatten the tested runtime to avoid cumulative Docker VFS layer-copy amplification.
+FROM sherlock-processor:0.4-build AS validated
+FROM scratch
+COPY --from=validated / /
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 OMP_THREAD_LIMIT=2 OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=1
+USER 65532:65532
+ENTRYPOINT ["python","-I","/app/worker.py"]

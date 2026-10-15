@@ -1,0 +1,411 @@
+.collection-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.collection-metrics article,
+.collection-paths,
+.heartbeat-grid article {
+  background: #111923;
+  border: 1px solid #283746;
+  border-radius: 10px;
+  padding: 20px;
+}
+.collection-metrics svg {
+  color: #83b7db;
+}
+.collection-metrics h3 {
+  font-size: 26px;
+  margin: 14px 0 6px;
+}
+.collection-metrics p,
+.muted {
+  color: #91a2b4;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.collection-paths code {
+  display: block;
+  margin: 10px 0;
+  color: #a3c7e3;
+  font-size: 12px;
+  word-break: break-all;
+}
+.collection-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 18px 0;
+}
+.collection-actions .field {
+  max-width: 330px;
+}
+.heartbeat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.heartbeat-grid strong,
+.heartbeat-grid small {
+  display: block;
+  margin-top: 12px;
+}
+.heartbeat-grid small {
+  color: #8596a9;
+  font-size: 11px;
+}
+.growth-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin: 14px 0;
+  font-size: 12px;
+}
+.growth-row div {
+  height: 7px;
+  background: #80b9d4;
+  max-width: 40%;
+  border-radius: 10px;
+}
+.queue-count {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #26313e;
+  font-size: 12px;
+}
+.inventory-table {
+  overflow: auto;
+  margin-top: 16px;
+}
+.inventory-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.inventory-table th {
+  text-align: left;
+  color: #7e91a5;
+  font-size: 11px;
+  padding: 15px 12px;
+  letter-spacing: 0.07em;
+}
+.inventory-table td {
+  font-size: 12px;
+  padding: 16px 12px;
+  border-top: 1px solid #243240;
+  vertical-align: top;
+}
+.inventory-table td button {
+  border: 0;
+  background: none;
+  color: #d8e4ee;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+.inventory-table td small {
+  display: block;
+  color: #74889d;
+  margin-top: 8px;
+}
+.patent-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 25px;
+}
+.patent-list button {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: #101823;
+  border: 1px solid #273747;
+  color: #b7c8d9;
+  text-align: left;
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.patent-list button.active {
+  border-color: #80b9d4;
+  background: #192b39;
+}
+.patent-list small {
+  color: #7d92a6;
+  line-height: 1.5;
+}
+.patent-detail {
+  border: 1px solid #273747;
+  background: #111923;
+  padding: 25px;
+  border-radius: 10px;
+}
+.patent-detail dl {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 14px;
+  font-size: 12px;
+}
+.patent-detail dt {
+  color: #7d92a6;
+}
+.patent-detail dd {
+  margin: 0;
+  line-height: 1.5;
+}
+.patent-detail details {
+  padding: 16px;
+  border: 1px solid #2a3947;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+.patent-detail summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: #abc7dd;
+}
+.patent-claim {
+  font-size: 12px;
+  line-height: 1.8;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #233543;
+}
+.patent-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid #293945;
+}
+.patent-link small {
+  color: #859bae;
+}
+.patent-link a {
+  color: #85bfdf;
+}
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.photo-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  background: #111923;
+  border: 1px solid #293845;
+  border-radius: 10px;
+  padding: 14px;
+  color: #c1d3e2;
+  gap: 12px;
+  cursor: pointer;
+}
+.photo-grid img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: #080e15;
+}
+.photo-grid small,
+.photo-grid span {
+  font-size: 11px;
+  color: #7e95aa;
+}
+.photo-lead {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #2a3b4a;
+  margin: 12px 0;
+  border-radius: 10px;
+}
+.photo-lead div {
+  flex: 1;
+  min-width: 0;
+}
+.photo-lead small {
+  font-size: 11px;
+  color: #8b9fae;
+  word-break: break-all;
+}
+.photo-lead p {
+  font-size: 12px;
+  color: #97b0c3;
+}
+@media (max-width: 1100px) {
+  .collection-metrics,
+  .heartbeat-grid,
+  .photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .patent-layout {
+    grid-template-columns: 1fr;
+  }
+  .patent-list {
+    display: flex;
+    gap: 10px;
+    overflow: auto;
+  }
+  .patent-list button {
+    min-width: 250px;
+  }
+  .photo-lead {
+    flex-wrap: wrap;
+  }
+}
+.method-catalogue details {
+  border: 1px solid #293b4c;
+  background: #111923;
+  padding: 18px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+.method-catalogue summary {
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+.method-catalogue p,
+.method-catalogue dl {
+  font-size: 12px;
+  color: #9eb4c6;
+  line-height: 1.6;
+}
+.method-catalogue dl {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 14px;
+}
+.method-catalogue dd {
+  margin: 0;
+}
+.method-catalogue a {
+  font-size: 12px;
+  color: #88bddb;
+  display: block;
+  margin: 15px 0;
+}
+.analysis-json {
+  min-height: 310px;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.cited-observation {
+  padding: 12px;
+  border-left: 2px solid #7babc4;
+  margin: 12px 0;
+  background: #121f2b;
+}
+.cited-observation button {
+  background: none;
+  border: none;
+  color: #92c5e7;
+  cursor: pointer;
+  font-size: 12px;
+}
+.cited-observation p {
+  font-size: 11px;
+  color: #a5bacb;
+  white-space: pre-wrap;
+  max-height: 100px;
+  overflow: auto;
+}
+.knowledge-query {
+  display: flex;
+  gap: 10px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.knowledge-query input {
+  flex: 1;
+  min-width: 280px;
+}
+.knowledge-query input,
+.knowledge-query select {
+  padding: 12px;
+  background: var(--panel, #171d27);
+  color: inherit;
+  border: 1px solid #344054;
+  border-radius: 6px;
+}
+.knowledge-hit {
+  background: var(--panel, #171d27);
+  border: 1px solid #344054;
+  border-radius: 10px;
+  padding: 22px;
+  margin: 16px 0;
+}
+.knowledge-hit blockquote {
+  white-space: pre-wrap;
+  border-left: 2px solid #56b4e9;
+  margin: 16px 0;
+  padding-left: 16px;
+  line-height: 1.7;
+}
+.knowledge-hit code {
+  display: block;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+  color: #8b9baa;
+  margin: 12px 0;
+}
+.knowledge-hit small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.knowledge-hit .status {
+  margin-right: 8px;
+}
+.knowledge-workspace details {
+  margin-top: 16px;
+}
+.knowledge-workspace summary {
+  cursor: pointer;
+  padding: 10px 0;
+}
+.knowledge-workspace .section-title h2 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.licence-review {
+  border: 1px solid #344054;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+.licence-review summary {
+  cursor: pointer;
+  font-size: 12px;
+}
+.licence-review label {
+  display: block;
+  margin: 14px 0;
+  font-size: 12px;
+}
+.licence-review input:not([type="checkbox"]),
+.licence-review textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  background: transparent;
+  color: inherit;
+  padding: 8px;
+  border: 1px solid #344054;
+  border-radius: 4px;
+}
+.licence-review textarea {
+  min-height: 100px;
+}

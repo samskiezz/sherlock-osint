@@ -1,0 +1,8 @@
+import {chromium} from 'playwright';
+import fs from 'node:fs/promises';
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});const page=await browser.newPage({viewport:{width:1800,height:1150}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto('http://127.0.0.1:8000',{waitUntil:'domcontentloaded'});await page.waitForSelector('.evidence-card');await page.getByTitle('Toggle inspector').click();
+await page.getByRole('button',{name:'Archive comparison',exact:true}).click();await page.getByRole('button',{name:'Compare & preserve',exact:true}).click();await page.locator('.comparison-result').waitFor();await page.screenshot({path:'../artifacts/archive-comparison-v3.png',fullPage:true});
+await page.getByRole('button',{name:'NASA materials literature · scientific context, not team evidence',exact:true}).click();await page.waitForTimeout(600);await page.getByRole('button',{name:'Fit board',exact:true}).click();await page.waitForTimeout(600);await page.screenshot({path:'../artifacts/nasa-evidence-board-v3.png',fullPage:true});
+await page.getByRole('button',{name:'Continuous watch',exact:true}).click();await page.locator('.job-card').first().waitFor();await page.screenshot({path:'../artifacts/cron-watch-v3.png',fullPage:true});
+await fs.writeFile('../artifacts/release-browser-results-v3.json',JSON.stringify({archiveComparison:'actual preserved 2019/2026 texts compared',nasaBoard:'seven original PDF previews and catalogue source links rendered',cron:'four enabled UTC cron watches rendered',browserErrors:errors},null,2));console.log(JSON.stringify({browserErrors:errors}));await browser.close();if(errors.length)process.exit(1);

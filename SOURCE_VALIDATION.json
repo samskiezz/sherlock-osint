@@ -1,0 +1,18 @@
+{
+  "scope": "Historical validation from the original running workspace; no claim of full platform completion or a new Mac installation",
+  "backend_regression": {
+    "summary": "507 passed, 186 warnings in 312.36s (0:05:12)",
+    "log_sha256": "5b5b0e98ebadb26bdb9e52d5fab4a59a574ff8353cc8cd7849b4b2cc851fc516",
+    "original_log": "artifacts/platform-regression-under-board.log"
+  },
+  "runtime_data_included": false,
+  "source_archive_excludes": "Evidence, databases, credentials, weights, generated investigation reports and old workspace Git history",
+  "notes": "The full original validation logs remain in the workspace and are intentionally omitted from the source snapshot.",
+  "clean_source_snapshot_checks": {
+    "focused_backend_tests": "24 passed, 103 warnings",
+    "relay_protocol_tests": "4 passed, 0 failed",
+    "gitleaks_version": "8.30.1",
+    "gitleaks_directory_findings": 0,
+    "original_workspace_history_scan": "18 pre-packaging commits; no leaks found"
+  }
+}

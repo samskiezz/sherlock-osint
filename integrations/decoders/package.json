@@ -1,0 +1,9 @@
+{
+  "name": "sherlock-established-decoders",
+  "private": true,
+  "version": "0.11.0",
+  "dependencies": {
+    "cyberchef": "11.5.0",
+    "terser": "5.51.2"
+  }
+}

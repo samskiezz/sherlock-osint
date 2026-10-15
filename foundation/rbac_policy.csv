@@ -1,0 +1,7 @@
+p, Admin, *, *
+p, Analyst, *, read
+p, Analyst, case, write
+p, Analyst, collection, write
+p, Analyst, analysis, write
+p, Analyst, legacy, write
+p, Viewer, *, read

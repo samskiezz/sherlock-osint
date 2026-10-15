@@ -1,0 +1,45 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+process.env.PLAYWRIGHT_BROWSERS_PATH ||= root+'.browsers';
+const {chromium}=await import('playwright');
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+try{
+ const page=await browser.newPage({viewport:{width:1820,height:1400}}),errors=[],analysisPosts=[],evidenceLists=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ page.on('request',r=>{if(new URL(r.url()).pathname==='/api/evidence')evidenceLists.push(r.url())});
+ page.on('request',r=>{if(r.method()==='POST'&&/\/api\/(automation|autopilot|visual|media|forensics)/.test(new URL(r.url()).pathname))analysisPosts.push(r.url());});
+ await page.goto('http://127.0.0.1:8010',{waitUntil:'domcontentloaded'});
+ const credentials=JSON.parse(await readFile(root+'data/foundation-secrets/admin-login.json','utf8'));
+ await page.getByLabel('Username',{exact:true}).fill(credentials.username);
+ await page.getByLabel('Password',{exact:true}).fill(credentials.password);
+ await page.getByRole('button',{name:'Sign in',exact:true}).click();
+ await page.getByRole('heading',{name:'Investigation',level:1,exact:true}).waitFor();
+ await page.getByRole('heading',{name:'Investigation running',level:2,exact:true}).waitFor();
+ await page.getByRole('heading',{name:'Across the collection',exact:true}).waitFor({timeout:30000});
+ await page.waitForFunction(()=>document.querySelectorAll('.media-review-card').length>=4);
+ await page.waitForFunction(()=>[...document.querySelectorAll('.media-review-card img')].filter(i=>i.complete&&i.naturalWidth>0).length>=4);
+ const cards=await page.locator('.media-review-card').count();
+ const distinctSources=new Set(await page.locator('.media-review-body > small').allTextContents());
+ if(distinctSources.size<3)throw Error('Media portfolio did not show independent sources');
+ if(await page.locator('.case-image-sequence:visible').count())throw Error('A specific composite dominates the default view');
+ if(await page.locator('textarea:visible').count())throw Error('Manual input controls are visible on the default investigation view');
+ if(await page.locator('.execution-drawer:visible').count())throw Error('Execution log is cluttering the default view');
+ if(await page.locator('.workspace-body > aside:visible').count())throw Error('Inspector should open only on demand');
+ const primaryNavigation=await page.locator('.sidebar > nav button').allTextContents();
+ if(primaryNavigation.length!==5)throw Error('Primary navigation was not simplified');
+ await page.screenshot({path:root+'artifacts/continuous-media-v13.png',fullPage:true});
+ await page.locator('.media-review-body details summary').first().click();
+ await page.screenshot({path:root+'artifacts/media-checks-v13.png',fullPage:true});
+ const firstImage=await page.locator('.media-review-card img').first().getAttribute('src');
+ await page.getByRole('button',{name:'Next',exact:true}).click();
+ await page.waitForFunction(t=>document.querySelector('.media-review-card img')?.getAttribute('src')!==t,firstImage);
+ const olderCards=await page.locator('.media-review-card').count();
+ if(!olderCards)throw Error('Older acquired images are missing from the portfolio');
+ await page.screenshot({path:root+'artifacts/continuous-media-older-v13.png',fullPage:true});
+
+ if(evidenceLists.some(url=>!url.includes('summary=true')))throw Error('Default view unnecessarily downloaded the full evidence corpus');
+ if(errors.length||analysisPosts.length)throw Error(JSON.stringify({errors,analysisPosts}));
+ await writeFile(root+'artifacts/continuous-media-browser-v13.json',JSON.stringify({authenticated:true,default_view:'Investigation',visible_image_cards:cards,older_page_image_cards:olderCards,portfolio_pagination_verified:true,distinct_source_labels:distinctSources.size,no_manual_analysis_requests:true,compact_evidence_catalogue_used:true,analysis_post_requests:analysisPosts,primary_navigation:primaryNavigation,composition_findings_collapsed:true,console_errors:errors,screenshots:['continuous-media-v13.png','media-checks-v13.png','continuous-media-older-v13.png']},null,2));
+ console.log(JSON.stringify({default_investigation:true,image_cards:cards,distinct_source_labels:distinctSources.size,manual_analysis_requests:analysisPosts.length,console_errors:errors.length}));
+}finally{await browser.close();}

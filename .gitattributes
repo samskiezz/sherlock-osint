@@ -1,0 +1,4 @@
+# Preserve acquired engineering reference bytes exactly, including their original whitespace.
+artifacts/automation-research-v10/** -diff -text
+artifacts/feature-api-documents-v10/** -diff -text
+artifacts/research-v11/** -diff -text

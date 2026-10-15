@@ -1,0 +1,117 @@
+name: sherlock-foundation
+services:
+  postgres:
+    image: postgres:17.6-alpine@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94
+    environment:
+      POSTGRES_DB: sherlock
+      POSTGRES_USER: sherlock
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    ports: ["127.0.0.1:55432:5432"]
+    secrets: [postgres_password]
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    mem_limit: 256m
+    cpus: 1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sherlock -d sherlock"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:8.2.1-alpine@sha256:987c376c727652f99625c7d205a1cba3cb2c53b92b0b62aade2bd48ee1593232
+    command: ["redis-server", "/run/secrets/redis_config"]
+    ports: ["127.0.0.1:56379:6379"]
+    secrets: [redis_config]
+    user: "${SHERLOCK_UID:-1000}:${SHERLOCK_GID:-1000}"
+    volumes: ["./data/foundation-redis:/data"]
+    mem_limit: 192m
+    cpus: 1
+    restart: unless-stopped
+  api:
+    profiles: [gateway]
+    build:
+      context: .
+      dockerfile: foundation/Dockerfile
+      secrets: [proxy_ca]
+    image: sherlock-foundation:0.10
+    command: ["python", "-m", "uvicorn", "foundation.app:app", "--host", "0.0.0.0", "--port", "8010"]
+    ports: ["127.0.0.1:8010:8010"]
+    environment: &gateway_env
+      DATABASE_URL: postgresql+psycopg://sherlock:${POSTGRES_PASSWORD:?Run setup_foundation.py}@postgres:5432/sherlock
+      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:?Run setup_foundation.py}@redis:6379/0
+      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:?Run setup_foundation.py}@redis:6379/1
+      JWT_SECRET: ${JWT_SECRET:?Run setup_foundation.py}
+      TOTP_KEY: ${TOTP_KEY:?Run setup_foundation.py}
+      CORE_URL: http://host.docker.internal:8001
+      CORE_TOKEN: ${CORE_TOKEN:?Run setup_foundation.py}
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+      NO_PROXY: ${NO_PROXY:-}
+      SSL_CERT_FILE: /run/secrets/proxy_ca
+      REQUESTS_CA_BUNDLE: /run/secrets/proxy_ca
+    secrets: [proxy_ca]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_started}
+    read_only: true
+    tmpfs: ["/tmp:rw,nosuid,nodev,noexec,size=67108864,mode=1777"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1
+    restart: unless-stopped
+  worker:
+    profiles: [gateway]
+    image: sherlock-foundation:0.10
+    command: ["python", "-m", "celery", "-A", "foundation.tasks:celery", "worker", "--pool=solo", "--concurrency=1", "--loglevel=WARNING"]
+    environment: *gateway_env
+    secrets: [proxy_ca]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_started}
+    read_only: true
+    tmpfs: ["/tmp:rw,nosuid,nodev,noexec,size=67108864,mode=1777"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1
+    restart: unless-stopped
+  qdrant:
+    profiles: [search]
+    image: qdrant/qdrant@sha256:b7b0444c4c351c970b98e90a6f89c2ee4287c65b44e52b4cb503fa5b2aa927ad
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:?Run setup_retrieval.py}
+      QDRANT__TELEMETRY_DISABLED: "true"
+    ports: ["127.0.0.1:56333:6333"]
+    volumes: [qdrant_data:/qdrant/storage]
+    mem_limit: 512m
+    cpus: 1
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+  elasticsearch:
+    profiles: [search]
+    image: ${SHERLOCK_ELASTIC_IMAGE:-docker.elastic.co/elasticsearch/elasticsearch@sha256:e1e66bfabae0fd03a0a36651a9bb198e7f061e0c99f457a6203b116e053e9cdb}
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:?Configure a separate Elasticsearch password}
+      ES_JAVA_OPTS: -Xms384m -Xmx384m -XX:ActiveProcessorCount=1
+      xpack.ml.enabled: "false"
+      ingest.geoip.downloader.enabled: "false"
+    ports: ["127.0.0.1:59200:9200"]
+    volumes: [elasticsearch_data:/usr/share/elasticsearch/data]
+    mem_limit: 1536m
+    cpus: 1
+    restart: unless-stopped
+secrets:
+  postgres_password: {file: ./data/foundation-secrets/postgres_password}
+  redis_config: {file: ./data/foundation-secrets/redis.conf}
+  proxy_ca: {file: "${SHERLOCK_PROXY_CA:-/etc/ssl/certs/ca-certificates.crt}"}
+volumes:
+  postgres_data: {}
+  redis_data: {}
+  elasticsearch_data: {}
+  qdrant_data: {}

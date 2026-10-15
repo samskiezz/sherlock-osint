@@ -1,0 +1,1 @@
+{"name":"sherlock-private-access","version":"0.1.0","private":true,"type":"module","scripts":{"build":"bash scripts/build.sh","test":"node --test scripts/test-relay.mjs"}}

@@ -1,0 +1,35 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+process.env.PLAYWRIGHT_BROWSERS_PATH ||= root+'.browsers';
+const {chromium}=await import('playwright');
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+try {
+ const page=await browser.newPage({viewport:{width:1820,height:1250}}), errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:8010',{waitUntil:'domcontentloaded'});
+ const credentials=JSON.parse(await readFile(root+'data/foundation-secrets/admin-login.json','utf8'));
+ await page.getByLabel('Username',{exact:true}).fill(credentials.username);
+ await page.getByLabel('Password',{exact:true}).fill(credentials.password);
+ await page.getByRole('button',{name:'Sign in',exact:true}).click();
+ await page.getByRole('button',{name:'Autonomous investigation',exact:true}).click();
+ await page.getByRole('heading',{name:'Autonomous investigation',exact:true,level:2}).waitFor();
+ await page.getByLabel('Automatic decoder input',{exact:true}).fill('NDg2NTZjNmM2ZjIwNzc2ZjcyNmM2NA==');
+ await page.getByRole('button',{name:'Automatically identify and decode',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('.automation-workspace')?.textContent.includes('Hello world'),{},{timeout:120000});
+ await page.screenshot({path:root+'artifacts/automatic-decoder-v11.png',fullPage:true});
+ await page.getByRole('button',{name:'Run all gematria mappings',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('.automation-workspace')?.textContent.includes('english ordinal'),{},{timeout:90000});
+ const ordinal=await page.getByText('english ordinal',{exact:true}).locator('..').innerText();
+ if(!ordinal.includes('79'))throw Error('Known gematria value not rendered');
+ await page.getByRole('button',{name:'Run all gematria mappings',exact:true}).scrollIntoViewIfNeeded();
+ await page.screenshot({path:root+'artifacts/gematria-v11.png',fullPage:true});
+ await page.getByLabel('Visual reference original',{exact:true}).selectOption('EV-6a350b477547');
+ const imageButton=page.getByRole('button',{name:'Prepare and compare image',exact:true});
+ await imageButton.click();
+ await page.waitForFunction(()=>document.querySelector('.automation-run-status .status')?.textContent==='COMPLETE' && [...document.querySelectorAll('details pre')].some(p=>p.textContent.includes('ransac_inliers')),{},{timeout:120000});
+ await page.screenshot({path:root+'artifacts/visual-investigation-v11.png',fullPage:true});
+ if(errors.length)throw Error(errors.join('; '));
+ await writeFile(root+'artifacts/autonomy-browser-v11.json',JSON.stringify({authenticated:true,automatic_layered_decoding:'Hello world',gematria_ordinal:79,actual_acquired_image:'EV-6a350b477547',console_errors:errors,screenshots:['automatic-decoder-v11.png','gematria-v11.png','visual-investigation-v11.png']},null,2));
+ console.log(JSON.stringify({authenticated:true,console_errors:errors.length,known_vectors_rendered:true}));
+}finally{await browser.close()}

@@ -1,0 +1,101 @@
+.forensic-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 22px;
+}
+.parameter-grid,
+.forensic-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+.forensic-metrics article {
+  padding: 20px;
+  border: 1px solid #273344;
+  background: linear-gradient(135deg, #121c29, #11151d);
+  border-radius: 10px;
+}
+.forensic-metrics h4 {
+  color: #8cbeff;
+  margin: 0 0 12px;
+}
+.forensic-metrics p {
+  font-size: 12px;
+  color: #9ba9ba;
+}
+.diagnostic-image {
+  position: relative;
+  background: #080b10;
+  border: 1px solid #2a3442;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 330px;
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.diagnostic-image img {
+  max-width: 100%;
+  max-height: 550px;
+  object-fit: contain;
+}
+.diagnostic-image span {
+  padding: 14px;
+  font-family: monospace;
+  font-size: 11px;
+  color: #9cabbd;
+  word-break: break-all;
+}
+.forensic-json {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #0b1018;
+  padding: 18px;
+  border-radius: 8px;
+  max-height: 520px;
+  overflow: auto;
+  font-size: 12px;
+}
+.forensic-workspace details {
+  border: 1px solid #273344;
+  padding: 14px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+.forensic-workspace summary {
+  cursor: pointer;
+  color: #adbbcd;
+  font-size: 13px;
+}
+.forensic-workspace .experiment-result pre {
+  max-height: 340px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+.automation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.automation-header p {
+  color: #8998ab;
+  line-height: 1.6;
+  max-width: 630px;
+}
+.forensic-workspace .experiment-history span:first-of-type {
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 1000px) {
+  .forensic-metrics {
+    grid-template-columns: 1fr;
+  }
+  .forensic-tabs,
+  .automation-header {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,10 @@
+*
+!Dockerfile
+!requirements.txt
+!worker.py
+
+!image_analysis.py
+
+!document_analysis.py
+
+!visual_features.py
