@@ -10,7 +10,7 @@ This addition is a bounded implementation; it does not establish million-mention
 performance or the blueprint's example accuracy and latency figures.
 Current checks and external blockers are recorded in the [ERPS validation record](docs/erps-validation.md).
 
-The current release runs at **http://127.0.0.1:8010** in the provided Linux workspace. It opens on **Evidence board**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
+The current release runs on port **8010 inside the provided Linux workspace**. The address `http://127.0.0.1:8010` works only on that machine; opening it on your phone or computer connects to your own device. Remote access requires an authenticated forwarded URL or a configured private relay. See [access from another device](docs/erps.md#access-from-another-device). It opens on **Evidence board**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
 
 ## GitHub source delivery
 
@@ -42,7 +42,7 @@ Validation: `artifacts/breakdown-tests.log`, `artifacts/case-breakdown-browser.j
 
 ## Automatic workspaces and the earlier statement feed
 
-Open the private app at **https://sherlock-looking-glass-access.sam-kazangas-5963.chatgpt.site**, signing in with the owner's ChatGPT account. The relay connects to this running workspace; it is not a permanent deployment independent of this machine.
+The existing private deployment is `https://sherlock-looking-glass-access.sam-kazangas-5963.chatgpt.site`. In this cloud environment its service/relay credentials are not bound and its relay is stopped, so it is **not a verified working application link**. Owner sign-in alone does not start the relay. The relay must connect to the running workspace; it is not a permanent deployment independent of this machine. See [access from another device](docs/erps.md#access-from-another-device) for the required configuration.
 
 The earlier statement feed showed source-checked documented statements, measured results, unresolved claims and recent acquisitions. Unread state survives browser reloads; it does not imply a newly discovered historical fact. AI proposals remain separate from documented statements. Exact passages open the source inspector directly. Reading never launches analysis.
 
@@ -133,7 +133,7 @@ Dependency review is candid: the decoder npm audit reports 25 findings (4 low, 1
 
 ## Automation controller delivered in v0.10
 
-Open **http://127.0.0.1:8010 → Automation control**. Repository: `/workspace/sherlock-osint`. This is the provided Linux workspace, not the user’s Mac. The existing evidence board, original vault, background research campaigns, full-text/vector search, timeline and forensic laboratories remain available.
+Inside the workspace, open **Automation control** at `http://127.0.0.1:8010`; from another device use the authenticated forwarded or configured private URL described above. Repository: `/workspace/sherlock-osint`. This is the provided Linux workspace, not the user’s Mac. The existing evidence board, original vault, background research campaigns, full-text/vector search, timeline and forensic laboratories remain available.
 
 The new catalogue contains **253 callable tools**: **35 ML/model adapters**, **157 deterministic analytical procedures**, **52 classical cipher/encoding transformations** and **9 operational adapters**. These are not 253 independent LLM agents or 253 scientifically validated investigative techniques. The pure-tool adapters execute the installed numerical libraries or reuse the existing bounded cipher/detector engines. No additional third-party repository, install hook, untrusted binary or model-generated program is executed.
 
@@ -169,7 +169,7 @@ The next executable integration task is an isolated, pinned transcription adapte
 
 ## Wider platform delivered in v0.9
 
-**Current entry point: http://127.0.0.1:8010.** The existing evidence wall remains the main interface. Open **Evidence retrieval** for the new search and cross-reference workspace.
+**Workspace-local entry point: `http://127.0.0.1:8010`.** Remote devices need the access configuration described above. The existing evidence wall remains the main interface. Open **Evidence retrieval** for the new search and cross-reference workspace.
 
 - **Real search services:** Elasticsearch BM25 and Qdrant cosine vectors, with an independently downloaded and SHA-256-verified local `all-minilm:22m` model. No external model API is needed. PostgreSQL, Redis, authenticated API and Celery worker also run as Compose containers.
 - **Continuous indexing:** acquired originals with attested text derivatives are checked every 60 seconds. Source and text hashes, exact Unicode offsets, PDF pages, model manifest and embedding recipe are retained. A 700-character passage is represented by normalised mean embeddings of every 180-character window, respecting the model's context limit. Failed/interrupted writes retry. Per-document indexing is capped at 2,000 passages; truncation is visible. Priority source requests persist in SQLite. Secondary notes are excluded.
@@ -205,7 +205,7 @@ Final v0.9 verification: **162 regression tests passed**, followed by **23 focus
 
 ## Foundation delivered in v0.8 (expanded by v0.9)
 
-Open **http://127.0.0.1:8010** to sign in and use the existing interactive evidence board through the authenticated gateway. Local administrator credentials are generated into `data/foundation-secrets/admin-login.json` (mode 0600); they are never committed or printed by setup. The original `:8000` interface remains a loopback-only compatibility service, so gateway authentication is **not** a claim that every local process is prevented from accessing the legacy API.
+Inside the workspace, open `http://127.0.0.1:8010` to sign in and use the existing interactive evidence board through the authenticated gateway. Remote devices need the access configuration described above. Local administrator credentials are generated into `data/foundation-secrets/admin-login.json` (mode 0600); they are never committed or printed by setup. The original `:8000` interface remains a loopback-only compatibility service, so gateway authentication is **not** a claim that every local process is prevented from accessing the legacy API.
 
 Implemented: SQLAlchemy models for Case, Entity, Evidence, User, AuditLog, collection outbox and schema version; actual PostgreSQL and password-protected, persistent Redis services; Argon2 passwords, short-lived HS256 JWT/cookie sessions, current database role checks through Casbin, encrypted PyOTP enrollment, consumed-code replay rejection and token revocation after MFA activation/logout. Admin provisions accounts; Analyst can collect/analyse; Viewer can read/export and cannot mutate. This is local JWT authentication, not a configured external OAuth/OIDC/SAML provider or case-specific multi-tenant authorisation.
 

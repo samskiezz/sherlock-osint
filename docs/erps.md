@@ -74,6 +74,37 @@ The `native` target packages an already compiled executable for a quick runtime
 smoke test: `docker build -f Dockerfile.erps --target native -t sherlock-erps:local .`.
 No credentials, vault files, models or frontend caches enter this build context.
 
+## Access from another device
+
+`127.0.0.1` always means the machine running your browser. The workspace's
+`http://127.0.0.1:8010/?view=entities` address cannot open the cloud application
+from your phone or computer. A source push to GitHub does not publish the app.
+
+If your workspace provides authenticated port forwarding, forward port **8010**
+and open its generated URL with `/?view=entities`. Keep the gateway authentication
+enabled. Ports 8000 and 3000 are internal services and should remain private.
+This session has no port-forwarding tool or generated external URL.
+
+The existing owner-private Sites relay is another access path. It requires all
+of the following secure environment bindings:
+
+- `SHERLOCK_PRIVATE_ACCESS_URL`: the existing private Sites origin.
+- `SHERLOCK_SITE_SERVICE_TOKEN`: service access to that private site.
+- `SHERLOCK_RELAY_SECRET`: the secret provisioned on the same relay Worker.
+
+These requirements are already declared in the saved cloud configuration draft.
+Add the corresponding values in environment settings, review and save the changes,
+then publish the environment. Do not paste credentials into chat or commit them.
+After configuration applies, the relay must start and a request through the
+external URL must be verified. Publishing the draft alone does not establish
+that the application is reachable.
+
+On 15 October 2026, the gateway and ERPS health checks passed locally, the private
+site returned HTTP 401 without owner authentication, and relay preflight reported
+all three bindings missing. No external working application URL is currently
+verified. The private site returning an authentication page does not demonstrate
+that the relay is connected.
+
 ## Request and commit sequence
 
 1. Authenticate the bearer token against `erps.policies` and require
