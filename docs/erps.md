@@ -99,6 +99,25 @@ After configuration applies, the relay must start and a request through the
 external URL must be verified. Publishing the draft alone does not establish
 that the application is reachable.
 
+The repository provides noninteractive commands that reuse those secure
+bindings without writing their values to files:
+
+```bash
+.venv/bin/python scripts/private_site_access.py --from-env --check-only
+.venv/bin/python scripts/run_foundation.py
+.venv/bin/python scripts/private_site_access.py --from-env --verify
+```
+
+The first command authenticates against an absent input ticket, without taking
+pending requests or changing the mailbox. `run_foundation.py` starts the relay
+when all three bindings are present and retains the existing gateway, worker
+and bridge. It labels external access as unverified. The final command checks
+the remote frontend, ERPS health, authenticated entity query and anonymous
+sign-in boundary. It prints the external entity-browser URL only after all
+checks pass. For foreground operation use
+`.venv/bin/python scripts/private_site_access.py --from-env` instead of starting
+the background relay. The legacy hidden-stdin mode is retained.
+
 On 15 October 2026, the gateway and ERPS health checks passed locally, the private
 site returned HTTP 401 without owner authentication, and relay preflight reported
 all three bindings missing. No external working application URL is currently

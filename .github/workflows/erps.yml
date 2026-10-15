@@ -50,6 +50,10 @@ jobs:
           mkdir -p data
           .venv/bin/python scripts/setup_erps.py
           .venv/bin/python -m pytest -q tests/test_erps.py --junitxml=data/erps-tests.xml
+      - name: Private access startup and relay protocol checks
+        run: |
+          .venv/bin/python -m pytest -q tests/test_private_site_access.py
+          npm --prefix hosting/private-access test
       - name: Frontend type check and production build
         working-directory: frontend
         run: |

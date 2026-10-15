@@ -33,6 +33,15 @@ commands = {
 import platform
 import os
 
+sys.path.insert(0, str(root))
+from scripts.private_site_access import missing_environment
+
+missing_access = missing_environment()
+if not missing_access:
+    commands["private-access"] = [
+        str(python), "scripts/private_site_access.py", "--from-env"
+    ]
+
 docker_env = dict(os.environ)
 for key in (
     "DOCKER_HOST",
@@ -122,6 +131,12 @@ print(
     json.dumps(
         {
             "gateway_url": "http://127.0.0.1:8010",
+            "gateway_access": "workspace_only",
+            "external_access": {
+                "status": "missing_configuration" if missing_access else "starting_unverified",
+                "missing_bindings": missing_access,
+                "verify_command": ".venv/bin/python scripts/private_site_access.py --from-env --verify",
+            },
             "worker": "Celery solo; bounded public-profile adapter",
             "logs": "data/foundation-*.log",
             "credentials_printed": False,

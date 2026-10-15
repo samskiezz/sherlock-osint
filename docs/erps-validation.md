@@ -4,7 +4,7 @@ Validated on 15 October 2026 in the cloud workspace. This record distinguishes
 executed checks, a resolved test-contract mismatch, and blocked external checks.
 It does not certify every capability of the thesis or the existing platform.
 
-The final code commit `4632830` passed the [GitHub Actions verification
+The ERPS implementation commit `4632830` passed the [GitHub Actions verification
 run](https://github.com/samskiezz/sherlock-osint/actions/runs/38743720862), including
 its separately provisioned Postgres 16 acceptance tests. The two preceding code
 commits also passed. Documentation-only updates do not rerun this workflow.
@@ -18,6 +18,7 @@ commits also passed. Documentation-only updates do not rerun this workflow.
 | Foundation integration | 4 passed, 3 failed due to missing historical fixtures and public DNS |
 | Available retrieval tests | 5 passed; 6 model/search checks not run |
 | Private relay Worker tests | 4 passed |
+| Private access follow-up | 25 Python checks and 5 Worker checks passed; includes real HTTP companion/Worker round trip using fixture storage |
 | Frontend TypeScript and Vite build | Passed; existing large-chunk warning remains |
 | Authenticated Chromium flow | Passed; no page exceptions; entity deep link, search, lineage, indexing, malformed-input status |
 | Live gateway roles | Viewer/Analyst/Admin boundaries passed, including forged-header rejection |
@@ -64,7 +65,8 @@ The implementation retains network-disabled extraction, immutable originals,
 read-only mounts/root, dropped capabilities and the independent 90-second
 parser execution limit. The core's creation timeout is bounded to 45–300 seconds.
 
-Across current Python coverage, 515 cases passed, three external integration
+Across the recorded Python runs including the private access follow-up,
+540 cases passed, three external integration
 cases remain failed, and six retrieval cases were not run. Rust, browser,
 container and Worker checks are reported separately rather than mixed into
 that Python count.
@@ -106,6 +108,18 @@ Owner service/relay credentials are not bound in this workspace, so a hosted
 ERPS request through that site has **not** been verified and the relay has not
 been started. No externally working application link is claimed by the source
 push or by the environment configuration draft.
+
+The access follow-up fixes the authentication preflight to read an absent input
+ticket (HTTP 410). The earlier unknown-operation probe expected HTTP 404, but
+the Worker validates a ticket first and returns HTTP 400 for that request.
+Secure environment startup and a remote verification command are now checked in;
+the foundation launcher starts the relay when its bindings are present. Verification
+requires remote frontend HTML, ERPS health, an authenticated entity query and the
+anonymous sign-in boundary before it prints an external application URL. All
+25 Python access checks passed, including an HTTP round trip through the actual
+Worker code and Python polling companion against a synthetic gateway and an
+in-memory R2 fixture. Five Worker checks also passed. This fixture execution
+does not establish access to the live Sites deployment or create hosting credentials.
 
 Implementation limits and security boundaries are in [the operating contract](erps.md):
 10,000 mentions/workspace, 500,000 candidate pairs, full-workspace repair,
