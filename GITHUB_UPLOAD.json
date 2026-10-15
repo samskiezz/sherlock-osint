@@ -1,19 +1,14 @@
 {
   "requested_action": "Upload the current SHERLOCK OSINT source to GitHub",
   "authorised": true,
-  "updated_utc": "2026-10-15T08:09:01.024909+00:00",
-  "status": "BLOCKED_REPOSITORY_CREATION_PERMISSION",
+  "updated_utc": "2026-10-15T08:20:12.791817+00:00",
+  "status": "READY_TO_PUSH",
   "uploaded": false,
   "connected_account": "samskiezz",
   "intended_repository": "samskiezz/sherlock-osint",
-  "repository_exists": false,
-  "visibility": "private",
-  "github_error": {
-    "status": 403,
-    "message": "Resource not accessible by integration",
-    "operation": "POST /user/repos"
-  },
-  "required_next_step": "Create an empty private repository and enable access through the GitHub connection, or supply an existing destination.",
+  "repository_exists": true,
+  "visibility": "public",
+  "required_next_step": "Push prepared source and verify the remote commit and files",
   "completion_verified": false,
   "excludes": [
     "credentials",
@@ -24,5 +19,13 @@
     "model weights",
     "original workspace Git history"
   ],
-  "source_delivery": "A clean source snapshot; this is not a complete evidence archive or a claim that the full platform specification is implemented."
+  "source_delivery": "A clean source snapshot; this is not a complete evidence archive or a claim that the full platform specification is implemented.",
+  "repository_accessible": true,
+  "repository_url": "https://github.com/samskiezz/sherlock-osint",
+  "previous_creation_blocker_resolved_by": "Owner-created repository is now accessible with push permission",
+  "previous_creation_error": {
+    "status": 403,
+    "message": "Resource not accessible by integration",
+    "operation": "POST /user/repos"
+  }
 }

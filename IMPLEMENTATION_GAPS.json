@@ -382,9 +382,9 @@
     {
       "id": "DEPLOY-03",
       "requirement": "Upload current source to GitHub, as subsequently requested",
-      "status": "BLOCKED BY GITHUB REPOSITORY CREATION PERMISSION",
+      "status": "SOURCE PREPARED; UPLOAD VERIFICATION PENDING",
       "evidence": "GITHUB_UPLOAD.json",
-      "remaining": "Create an empty private repository and enable access through the GitHub connection, or supply an existing destination."
+      "remaining": "Push and verify current source in the owner-enabled GitHub repository; full platform completion remains separate"
     },
     {
       "id": "QUALITY-01",
@@ -722,7 +722,7 @@
     }
   ],
   "execution": "Existing acquisition, scheduled-research, compatible-analysis and dossier-candidate workers continue while the workspace runs. This is not a claim that the assistant keeps editing code after its turn ends.",
-  "github_push": "Authorised by the latest explicit upload request; destination creation blocked by GitHub HTTP 403. See GITHUB_UPLOAD.json.",
+  "github_push": "Current source upload authorised and destination accessible; verification pending in GITHUB_UPLOAD.json.",
   "latest_validation": {
     "backend_tests": 507,
     "warnings": 186,

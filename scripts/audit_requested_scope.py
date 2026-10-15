@@ -386,9 +386,9 @@ items = [
     (
         "DEPLOY-03",
         "Upload current source to GitHub, as subsequently requested",
-        "BLOCKED BY GITHUB REPOSITORY CREATION PERMISSION",
+        "SOURCE PREPARED; UPLOAD VERIFICATION PENDING",
         "GITHUB_UPLOAD.json",
-        "GitHub authentication works, but creating a repository returns HTTP 403; an enabled destination repository is required",
+        "GitHub destination is accessible; verify the remote commit after uploading current source",
     ),
     (
         "QUALITY-01",
@@ -480,7 +480,7 @@ data = {
         for name in integrations
     ],
     "execution": "Existing acquisition, scheduled-research, compatible-analysis and dossier-candidate workers continue while the workspace runs. This is not a claim that the assistant keeps editing code after its turn ends.",
-    "github_push": "Authorised by the latest explicit upload request; creation of the destination repository is blocked by GitHub HTTP 403. See GITHUB_UPLOAD.json.",
+    "github_push": "Current source upload authorised and destination accessible; see GITHUB_UPLOAD.json for verification.",
 }
 existing_path = ROOT / "IMPLEMENTATION_GAPS.json"
 if existing_path.is_file():

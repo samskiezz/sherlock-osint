@@ -28,15 +28,15 @@
     },
     {
       "path": "GITHUB_UPLOAD.json",
-      "sha256": "15843cd3a3d735f75264a894621e763b036447c691ba1ba9d40806bd58cc6cab"
+      "sha256": "d8d72b99b4f99696b212150f9a3455c9397ea4ce74c885a62a7aed1560742006"
     },
     {
       "path": "IMPLEMENTATION_GAPS.json",
-      "sha256": "c7e61b343687aabd88d8f4278b9cc1bc445f40cb8bc66385518e792514ef6405"
+      "sha256": "0ab580ef370c649e60e04e82ada0d8da60bddc1cc0908087e521ab6befc114bf"
     },
     {
       "path": "README.md",
-      "sha256": "d881e8952646845213560da4362f1dfa12a07172b800586727d3b64cc17e0541"
+      "sha256": "5a0d49f5229653bc472e9c819ccd9c1b67a983e1e2f2b05bac7ffc7e5a8cb0bc"
     },
     {
       "path": "SOURCE_VALIDATION.json",
@@ -56,7 +56,7 @@
     },
     {
       "path": "artifacts/delivery-readiness.json",
-      "sha256": "a635272e489bdc4df05c20fe6432d03f061fe9a51aadbea5a239c8626e729f7e"
+      "sha256": "6ee2daf0fac48d822df2b02b1ad6edc0595cb298583b8cacf3c840d89d94c391"
     },
     {
       "path": "artifacts/embedding-model-integrity-v9.json",
@@ -620,7 +620,7 @@
     },
     {
       "path": "scripts/audit_requested_scope.py",
-      "sha256": "77672a000324ed4497aeecfdc5c9c232355000c6cb997e5f8684f99738d07859"
+      "sha256": "ecdafcce1a004bb2aa81e445ac8c712d7414e4575165d860b45db9eb89502199"
     },
     {
       "path": "scripts/bootstrap_foundation.py",
@@ -901,6 +901,14 @@
     {
       "path": "tests/test_workspaces.py",
       "sha256": "629e5629bcde5a4cca34a18d23451e7d8bf7baeb376041e65f19140afa249fe4"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "d0926934d3a9deda093b9aa8216a97d746535030684b4a0b1f721fbb836f0fd3"
     }
+  ],
+  "retained_remote_seed_commit": "954f0523cd2d09251ade13f64e2fcdd55d7f6a9a",
+  "retained_remote_files": [
+    "LICENSE"
   ]
 }

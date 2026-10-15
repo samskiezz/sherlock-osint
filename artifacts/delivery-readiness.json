@@ -9,12 +9,15 @@
     "Live Tor acquisition is blocked by the current network configuration",
     "Universal hidden-image decoding and future prediction are not verified capabilities"
   ],
-  "git_remotes_configured": [],
+  "git_remotes_configured": [
+    "https://github.com/samskiezz/sherlock-osint.git"
+  ],
   "private_https_access_verified": true,
   "private_url": "https://sherlock-looking-glass-access.sam-kazangas-5963.chatgpt.site",
-  "upload_status": "BLOCKED_REPOSITORY_CREATION_PERMISSION",
+  "upload_status": "READY_TO_PUSH",
   "upload_completed": false,
-  "github_error": {
+  "repository_visibility": "public",
+  "previous_creation_error": {
     "status": 403,
     "message": "Resource not accessible by integration",
     "operation": "POST /user/repos"
