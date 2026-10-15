@@ -32,6 +32,7 @@
       "500 synthetic mentions; not a forensic accuracy estimate",
       "Five repeats do not establish a production p99",
       "No baseline comparisons or million-mention result claimed"
-    ]
+    ],
+    "scoring_engine": "sequential scalar evaluation harness; API uses Rayon or DataFusion"
   }
 }

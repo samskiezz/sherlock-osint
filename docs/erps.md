@@ -238,6 +238,7 @@ The evaluation harness measures pairwise precision/recall/F1, B-cubed,
 exact-cluster F1, blocking quality/recall/reduction and empirical latency
 quantiles using a fixed synthetic dataset. Contingency-table metrics avoid an
 all-pairs metric calculation. Generated noise and seeded UUIDs are reproducible.
+The harness uses sequential scalar scoring; the API uses Rayon or DataFusion.
 Latency covers in-process blocking/scoring/clustering, excludes HTTP and
 database persistence, and uses the build profile of the executable. Five
 repeats cannot establish a reliable production p99. The blueprint's sample

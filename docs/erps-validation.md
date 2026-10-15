@@ -4,10 +4,10 @@ Validated on 15 October 2026 in the cloud workspace. This record distinguishes
 executed checks, a resolved test-contract mismatch, and blocked external checks.
 It does not certify every capability of the thesis or the existing platform.
 
-The first published implementation also passed the [GitHub Actions verification
-run](https://github.com/samskiezz/sherlock-osint/actions/runs/38733428038), including
-its separately provisioned Postgres 16 acceptance tests. Subsequent code changes
-run the same workflow; documentation-only updates do not rerun it.
+The final code commit `4632830` passed the [GitHub Actions verification
+run](https://github.com/samskiezz/sherlock-osint/actions/runs/38743720862), including
+its separately provisioned Postgres 16 acceptance tests. The two preceding code
+commits also passed. Documentation-only updates do not rerun this workflow.
 
 | Check | Result |
 | --- | --- |
@@ -89,7 +89,7 @@ See [the complete machine-readable measurements](erps-evaluation.json).
 The fixed sample has 100 entities × 5 mentions, noise 0.15, seed 42, five repeats.
 The actual measured pairwise F1 was **0.881432**, B-cubed F1 **0.907343**,
 exact-cluster F1 **0.448980**, blocking recall **1.0**, and reduction **0.755784**.
-The unoptimized in-process harness measured p50 **5844.29 ms**, p95/p99
+The unoptimized sequential scalar harness measured p50 **5844.29 ms**, p95/p99
 **7088.01 ms**. Those timings exclude HTTP and Postgres, were collected in a
 shared cloud environment, and do not represent production latency guarantees.
 The blueprint's example 45/120/280 ms numbers were not reused as results.
