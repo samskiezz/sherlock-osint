@@ -115,5 +115,25 @@
   "new_results_module_bandit_findings": 0,
   "hosting": "private relay bindings absent; external app unverified",
   "historical_originals": "not restored or fabricated",
-  "optional_model_and_search_readiness": "not established"
+  "optional_model_and_search_readiness": "not established",
+  "tested_code_commit": "0070197dbc4ee52dc118b62d21fbc1486211e503",
+  "ci": {
+    "status": "passed",
+    "url": "https://github.com/samskiezz/sherlock-osint/actions/runs/38844735420"
+  },
+  "final_runtime": {
+    "gateway_healthy": true,
+    "core_healthy": true,
+    "erps_healthy": true,
+    "anonymous_results_denied": true,
+    "originals_including_labelled_fixtures": 7,
+    "source_reports": 7,
+    "source_reports_readable": true,
+    "automation_enabled": true,
+    "worker_alive": true,
+    "core_audit_valid": true,
+    "gateway_audit_valid": true,
+    "erps_audit_valid": true,
+    "case_database_integrity": "ok"
+  }
 }

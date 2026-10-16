@@ -4,6 +4,13 @@ Validated on 16 October 2026 in the managed cloud workspace. This change connect
 routine ingestion to automatic analysis and makes saved outputs readable in the
 frontend. It does not establish completion of every historical platform requirement.
 
+Code commit `0070197` passed the maintained
+[GitHub CI workflow](https://github.com/samskiezz/sherlock-osint/actions/runs/38844735420),
+including the new source-results tests. Final workspace checks confirmed healthy
+gateway/core/ERPS services, valid audit chains, anonymous-access denial and an intact
+case database. All seven currently preserved originals, including the clearly
+labelled acceptance fixtures, had readable source reports.
+
 ## Verified behavior
 
 | Check | Observed result |
