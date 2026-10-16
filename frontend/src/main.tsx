@@ -9,6 +9,7 @@ import {
 import TradecraftWorkspace from "./TradecraftWorkspace";
 import KnowledgeWorkspace from "./KnowledgeWorkspace";
 import EntitiesWorkspace from "./EntitiesWorkspace";
+import ResultsWorkspace, { ToolsWorkspace } from "./ResultsWorkspace";
 import AutomationWorkspace from "./AutomationWorkspace";
 import AutonomousWorkspace from "./AutonomousWorkspace";
 import CaseOverview from "./CaseBreakdown";
@@ -94,6 +95,7 @@ import {
   FolderOpen,
   Undo2,
   Redo2,
+  Wrench,
 } from "lucide-react";
 
 import "@fontsource-variable/dm-sans";
@@ -232,6 +234,8 @@ function EvidenceCard({ data, selected }: any) {
 }
 const nodeTypes = { evidence: EvidenceCard };
 const nav = [
+  ["results", "Case results", FileText],
+  ["tools", "All tools & workspaces", Wrench],
   ["board", "Evidence board", Network],
   ["library", "Evidence library", Files],
   ["vault", "Growing database", Files],
@@ -255,11 +259,19 @@ const nav = [
   ["graph", "Graph intelligence", GitBranch],
   ["agents", "Investigator", ScanEye],
 ] as const;
+function requestedView() {
+  const requested = new URLSearchParams(window.location.search).get("view");
+  return nav.some((n) => n[0] === requested)
+    ? requested!
+    : window.location.hash.startsWith("#case/")
+      ? "autonomous"
+      : "results";
+}
 function App() {
   const [evidence, setEvidence] = useState<Evidence[]>([]),
     [jobs, setJobs] = useState<Job[]>([]),
     [activity, setActivity] = useState<any[]>([]),
-    [view, setView] = useState(new URLSearchParams(window.location.search).get("view") === "entities" ? "entities" : "board"),
+    [view, setViewState] = useState(requestedView),
     [selected, setSelected] = useState<string | null>(null),
     [edgeSelected, setEdgeSelected] = useState<Edge | null>(null),
     [theme, setTheme] = useState(localStorage.getItem("theme") || "dark"),
@@ -283,6 +295,26 @@ function App() {
     [inspectorTab, setInspectorTab] = useState("original"),
     [citationFocus, setCitationFocus] = useState(""),
     [loading, setLoading] = useState(true);
+  function setView(next: string, parameters: Record<string, string> = {}) {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    url.searchParams.set("view", next);
+    for (const [key, value] of Object.entries(parameters))
+      url.searchParams.set(key, value);
+    if (url.href !== window.location.href)
+      window.history.pushState({}, "", url);
+    setViewState(next);
+    setSearchResults(null);
+  }
+  useEffect(() => {
+    const pop = () => {
+      setViewState(requestedView());
+      setSearchResults(null);
+    };
+    window.addEventListener("popstate", pop);
+    return () => window.removeEventListener("popstate", pop);
+  }, []);
   const flow = useReactFlow();
   const loaded = useRef(false);
   const defaultSelection = useRef(false);
@@ -296,7 +328,11 @@ function App() {
   };
   const refresh = useCallback(async () => {
     const brief =
-      view === "board" || view === "autonomous" || isAutomaticView(view);
+      view === "results" ||
+      view === "tools" ||
+      view === "board" ||
+      view === "autonomous" ||
+      isAutomaticView(view);
     let [e, j, a] = await Promise.all([
       api(
         brief
@@ -563,7 +599,7 @@ function App() {
   };
   return (
     <div
-      className={`app-shell ${view === "board" ? "board-with-breakdown" : ""} ${view === "autonomous" ? "investigation-home" : ""} ${["lab", "automation", "knowledge", "patents", "photos", "tradecraft", "research", "onion", "watch", "cipher", "archives", "agents"].includes(view) ? "automatic-tab" : ""}`}
+      className={`app-shell ${["results", "tools"].includes(view) ? "results-home" : ""} ${view === "board" ? "board-with-breakdown" : ""} ${view === "autonomous" ? "investigation-home" : ""} ${["lab", "automation", "knowledge", "patents", "photos", "tradecraft", "research", "onion", "watch", "cipher", "archives", "agents"].includes(view) ? "automatic-tab" : ""}`}
     >
       <aside className="sidebar">
         <div className="brand">
@@ -581,7 +617,7 @@ function App() {
           className="case-box"
           onClick={() => {
             setBoardId("looking-glass");
-            setView("board");
+            setView("results");
           }}
         >
           <div className="case-symbol">
@@ -597,6 +633,8 @@ function App() {
           {nav
             .filter(([id]) =>
               [
+                "results",
+                "tools",
                 "autonomous",
                 "board",
                 "library",
@@ -605,13 +643,11 @@ function App() {
                 "timeline",
               ].includes(id),
             )
-            .sort(
-              (a, b) =>
-                Number(b[0] === "autonomous") - Number(a[0] === "autonomous"),
-            )
             .map(([id, label, Icon]) => (
               <button
                 key={id}
+                aria-label={label}
+                title={label}
                 className={view === id ? "active" : ""}
                 onClick={() => {
                   setView(id);
@@ -655,6 +691,9 @@ function App() {
                 .filter(
                   ([id]) =>
                     ![
+                      "results",
+                      "tools",
+                      "entities",
                       "autonomous",
                       "board",
                       "library",
@@ -665,6 +704,8 @@ function App() {
                 .map(([id, label, Icon]) => (
                   <button
                     key={id}
+                    aria-label={label}
+                    title={label}
                     className={view === id ? "active" : ""}
                     onClick={() => {
                       setView(id);
@@ -816,21 +857,25 @@ function App() {
             </div>
             <h1>{nav.find((n) => n[0] === view)?.[1] || "Evidence board"}</h1>
             <p>
-              {view === "board"
-                ? "Every connection starts with evidence. Follow the thread."
-                : view === "library"
-                  ? "Preserved originals and clearly marked investigative notes."
-                  : view === "queue"
-                    ? "Discover → fetch → hash → preserve → extract → index."
-                    : view === "cipher"
-                      ? "Reproducible transformations. Controls before conclusions."
-                      : view === "timeline"
-                        ? "Keep creation, publication, capture and retrieval dates distinct."
-                        : view === "watch"
-                          ? "Always watching. Scheduled discovery with durable execution history."
-                          : view === "agents"
-                            ? "Query acquired evidence. Inspect every tool result."
-                            : "Inspect the structure. Verify every relationship."}
+              {view === "results"
+                ? "New evidence is analysed automatically. Read the outputs, sources and remaining gaps here."
+                : view === "tools"
+                  ? "Every registered tool and specialist workspace, with readable execution results."
+                  : view === "board"
+                    ? "Every connection starts with evidence. Follow the thread."
+                    : view === "library"
+                      ? "Preserved originals and clearly marked investigative notes."
+                      : view === "queue"
+                        ? "Discover → fetch → hash → preserve → extract → index."
+                        : view === "cipher"
+                          ? "Reproducible transformations. Controls before conclusions."
+                          : view === "timeline"
+                            ? "Keep creation, publication, capture and retrieval dates distinct."
+                            : view === "watch"
+                              ? "Always watching. Scheduled discovery with durable execution history."
+                              : view === "agents"
+                                ? "Query acquired evidence. Inspect every tool result."
+                                : "Inspect the structure. Verify every relationship."}
             </p>
           </div>
           <div className="header-actions">
@@ -906,6 +951,15 @@ function App() {
                     </button>
                   ))}
                 </div>
+              ) : view === "results" ? (
+                <ResultsWorkspace
+                  openEvidence={selectEvidence}
+                  navigate={setView}
+                  onAcquire={() => setModal(true)}
+                  onChange={refresh}
+                />
+              ) : view === "tools" ? (
+                <ToolsWorkspace navigate={setView} />
               ) : view === "board" ? (
                 <div className="board-and-breakdown">
                   <div className="board-toolbar">

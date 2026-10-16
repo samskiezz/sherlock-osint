@@ -141,11 +141,18 @@ def install(core: Any) -> dict:
             raise ValueError(
                 "Image requires reprocessing with the current isolated processor"
             )
+        e["_visual_source_binding"] = {
+            "evidence_id": eid,
+            "original_sha256": e["sha256"],
+            "text_sha256": digest,
+            "derivative_hashes": {"result.json": expected},
+        }
         return e, features
 
     def search(eid: str, limit: int = 20) -> dict:
         """Compare actual acquired images; preserve failures and corpus coverage boundaries."""
         reference, features = source(eid)
+        source_bindings = [reference["_visual_source_binding"]]
         results = []
         stories = []
         unavailable = []
@@ -176,6 +183,7 @@ def install(core: Any) -> dict:
                     )
                     stories.append(story["id"])
                 scanned += 1
+                source_bindings.append(e["_visual_source_binding"])
                 results.append(
                     {
                         "evidence_id": e["id"],
@@ -196,6 +204,7 @@ def install(core: Any) -> dict:
         )
         record = {
             "reference_id": eid,
+            "source_bindings": source_bindings,
             "explanation_ids": stories,
             "reference_sha256": reference["sha256"],
             "compared": scanned,

@@ -651,6 +651,12 @@ def process(eid):
         )
         if "erps" in globals():
             erps["enqueue"](eid)
+        if "autopilot" in globals():
+            try:
+                autopilot["on_extracted"](eid)
+            except Exception as ex:
+                # The original remains usable. The durable scanner retries dispatch.
+                log("automatic_analysis_dispatch_pending", {"id": eid, "error": str(ex)[:800]})
 
 
 executor = ThreadPoolExecutor(max_workers=2)
@@ -1485,6 +1491,9 @@ automatic_workspaces = install_automatic_workspaces(sys.modules[__name__])
 
 from .erps import install as install_erps
 erps = install_erps(sys.modules[__name__])
+
+from .results import install as install_results
+results = install_results(sys.modules[__name__])
 
 # Production: one loopback service serves the compiled UI and API.
 from fastapi.staticfiles import StaticFiles

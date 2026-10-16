@@ -390,9 +390,19 @@ CREATE INDEX IF NOT EXISTS automation_runs_status ON automation_runs(status,crea
     def core_tool(tool: str, inputs: dict, effect_id: str) -> dict:
         """Invoke only fixed owned adapters; no arbitrary HTTP destinations or host tools."""
         if tool == "forensics.screen":
+            _, provenance = source_data(inputs)
+            if not provenance:
+                raise ValueError("An acquired evidence_id is required")
+            output = core.forensics["analyse"](inputs["evidence_id"])
+            recorded = output["data"]
+            if recorded["evidence_sha256"] != provenance[0]["original_sha256"] or recorded["text_derivative_sha256"] != provenance[0]["text_sha256"]:
+                raise ValueError("Forensic analysis source changed during execution")
+            provenance[0]["text_start"] = recorded.get("input_offset", 0)
+            provenance[0]["text_end"] = provenance[0]["text_start"] + len(recorded.get("input", ""))
             return {
                 "tool": tool,
-                "output": core.forensics["analyse"](inputs.get("evidence_id", "")),
+                "output": output,
+                "sources": provenance,
                 "limitations": DISCLAIMER,
             }
         if tool == "decoder.auto":
@@ -424,14 +434,15 @@ CREATE INDEX IF NOT EXISTS automation_runs_status ON automation_runs(status,crea
                     "original_sha256": original["sha256"],
                     "features": features,
                 },
+                "sources": [original["_visual_source_binding"]],
                 "limitations": DISCLAIMER,
             }
         if tool == "visual.search":
+            output = core.visual["search"](inputs.get("evidence_id", ""), inputs.get("limit", 20))
             return {
                 "tool": tool,
-                "output": core.visual["search"](
-                    inputs.get("evidence_id", ""), inputs.get("limit", 20)
-                ),
+                "output": output,
+                "sources": output["source_bindings"],
                 "limitations": DISCLAIMER,
             }
         if tool.startswith("evidence.") or tool == "model.cited_note":
@@ -801,6 +812,9 @@ CREATE INDEX IF NOT EXISTS automation_runs_status ON automation_runs(status,crea
                         inputs = resolve(step.inputs, outputs, data["bindings"])
                         if len(json.dumps(inputs, allow_nan=False).encode()) > 256000:
                             raise ValueError("Resolved input exceeds 256 KB")
+                        # A failed tool still belongs to its attempted source. Retain
+                        # resolved inputs before invocation, not only after success.
+                        receipt["inputs"] = inputs
                         result = invoke(step.tool, inputs, rid + ":" + step.id)
                         receipt.update(
                             inputs=inputs,

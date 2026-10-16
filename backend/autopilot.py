@@ -1,6 +1,9 @@
 """Automatic compatible-tool fan-out, applicability receipts and changed-source monitoring."""
 
-import hashlib, json, re, threading
+import hashlib
+import json
+import re
+import threading
 from typing import Any
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
@@ -54,6 +57,14 @@ TEXT = {
 }
 
 
+def profile_version(mime):
+    return (
+        "source-bound-image-profiles-v14"
+        if (mime or "").startswith("image/")
+        else "source-bound-text-profiles-v14"
+    )
+
+
 class Settings(BaseModel):
     """Automate analysis with resource limits, without selecting ciphers per evidence item."""
 
@@ -68,6 +79,7 @@ class Scan(BaseModel):
 
     evidence_id: str = Field(default="", max_length=100)
     limit: int = Field(default=5, ge=1, le=100)
+    force: bool = False
 
 
 def candidate_spans(text: str) -> list[dict]:
@@ -110,7 +122,7 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
         "INSERT OR IGNORE INTO autopilot_settings VALUES(?,?)",
         ("default", json.dumps(Settings().model_dump())),
     )
-    gate = threading.Lock()
+    gate = threading.RLock()
 
     def settings() -> dict:
         """Read the persisted automation preference and eligibility boundary."""
@@ -120,7 +132,7 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
             ]["data"]
         )
 
-    def dispatch(eid: str, force: bool = False) -> dict:
+    def _dispatch(eid: str, force: bool = False) -> dict:
         """Automatically select compatible functions, preserving why every other tool was skipped."""
         e, meta, digest = core.forensics["source"](eid)
         config = settings()
@@ -130,9 +142,7 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
                     eid,
                     e["sha256"],
                     digest,
-                    "automatic-image-profiles-v12"
-                    if e["mime"].startswith("image/")
-                    else "automatic-profiles-v11",
+                    profile_version(e["mime"]),
                     config.get("model_notes"),
                 ]
             ).encode()
@@ -141,7 +151,11 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
             "SELECT * FROM autopilot_dispatch WHERE evidence_id=? AND fingerprint=?",
             (eid, fingerprint),
         )
-        if previous and not force:
+        active_previous = previous and core.rows(
+            "SELECT id FROM automation_runs WHERE id=? AND status IN ('QUEUED','RUNNING','PAUSED')",
+            (previous[0]["run_id"],),
+        )
+        if previous and (not force or active_previous):
             return {
                 **previous[0],
                 "data": json.loads(previous[0]["data"]),
@@ -333,7 +347,7 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
             "steps": len(steps),
             "compatible_tools": len(selected),
             "catalogue_tools": len(coverage),
-            "profile_version": "v11",
+            "profile_version": profile_version(e["mime"]),
             "source_sha256": e["sha256"],
             "text_sha256": digest,
             "text_scan_limit": 16000,
@@ -353,6 +367,22 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
             "run_id": run["id"],
             "data": record,
         }
+
+    def dispatch(eid: str, force: bool = False) -> dict:
+        # Extraction and the recovery scan may discover the same original together.
+        with gate:
+            return _dispatch(eid, force)
+
+    def on_extracted(eid: str) -> dict:
+        """Queue analysis immediately; the periodic scan recovers a full queue/crash."""
+        config = settings()
+        if not config.get("enabled"):
+            return {"status": "PAUSED"}
+        if config.get("created_after"):
+            source = core.rows("SELECT created FROM evidence WHERE id=?", (eid,))
+            if source and source[0]["created"] < config["created_after"]:
+                return {"status": "OUTSIDE_SCOPE"}
+        return dispatch(eid)
 
     @core.app.get("/api/autopilot")
     def overview() -> dict:
@@ -389,26 +419,50 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
     @core.app.post("/api/autopilot/scan")
     def scan(value: Scan) -> dict:
         """Start a bounded immediate automatic pass; routine background discovery continues."""
+        if value.force and not value.evidence_id:
+            raise HTTPException(422, "Retry one explicit source at a time")
         if not gate.acquire(blocking=False):
             return {"status": "ALREADY_SCANNING", "dispatches": []}
         results = []
         try:
+            # Check compact stored fingerprints before hashing originals. A newest-500
+            # window starved older evidence forever once those 500 were dispatched.
+            known = {
+                (r["evidence_id"], r["fingerprint"])
+                for r in core.rows(
+                    "SELECT evidence_id,fingerprint FROM autopilot_dispatch"
+                )
+            }
+            config = settings()
             rows = (
                 [{"id": value.evidence_id}]
                 if value.evidence_id
                 else core.rows(
-                    "SELECT id FROM evidence WHERE path IS NOT NULL AND json_extract(metadata,'$.processing_status')='COMPLETE' ORDER BY created DESC LIMIT 500"
+                    "SELECT id,sha256,mime,created,json_extract(metadata,'$.derivative_hashes.\"text.txt\"') text_digest FROM evidence WHERE path IS NOT NULL AND json_extract(metadata,'$.processing_status')='COMPLETE' ORDER BY created,id"
                 )
             )
             for row in rows:
-                if not value.evidence_id and settings().get("created_after"):
-                    created = core.rows(
-                        "SELECT created FROM evidence WHERE id=?", (row["id"],)
-                    )[0]["created"]
-                    if created < settings()["created_after"]:
+                if not value.evidence_id:
+                    if (
+                        config.get("created_after")
+                        and row["created"] < config["created_after"]
+                    ):
+                        continue
+                    fingerprint = hashlib.sha256(
+                        json.dumps(
+                            [
+                                row["id"],
+                                row["sha256"],
+                                row["text_digest"],
+                                profile_version(row["mime"]),
+                                config.get("model_notes"),
+                            ]
+                        ).encode()
+                    ).hexdigest()
+                    if (row["id"], fingerprint) in known:
                         continue
                 try:
-                    result = dispatch(row["id"])
+                    result = dispatch(row["id"], force=value.force)
                     if not result.get("deduplicated"):
                         results.append(result)
                 except (ValueError, HTTPException) as ex:
@@ -451,4 +505,5 @@ CREATE TABLE IF NOT EXISTS autopilot_dispatch(evidence_id TEXT,fingerprint TEXT,
         "overview": overview,
         "settings": settings,
         "scan": scan,
+        "on_extracted": on_extracted,
     }

@@ -60,6 +60,10 @@ jobs:
         run: |
           .venv/bin/python -m pytest -q tests/test_private_site_access.py tests/test_gateway_body_limit.py tests/test_gateway_security.py
           npm --prefix hosting/private-access test
+      - name: Actual source tools, readable results and automatic dispatch
+        run: |
+          .venv/bin/pip install -r requirements.lock
+          .venv/bin/python -m pytest -q tests/test_results.py --junitxml=data/results-tests.xml
       - name: Frontend type check and production build
         working-directory: frontend
         run: |

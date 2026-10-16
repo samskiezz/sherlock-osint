@@ -1,5 +1,24 @@
 # SHERLOCK OSINT — PROJECT LOOKING GLASS
 
+## Automatic analysis and readable results
+
+The home screen is **Case results**. Add files or a public source URL; preserved
+originals are extracted and immediately queued for compatible analysis. Read each
+source's excerpts, dates, identifiers, saved outputs, failed checks and provenance
+in one notebook. Source and case reports download as readable Markdown; JSON is
+available for further analysis. The workers continue while the browser is closed.
+
+**All tools & workspaces** exposes every registered analytical adapter, its inputs,
+applicability and readable outputs. Previous executions have paginated history and
+bookmarkable result links. Source-dependent results are checked against their
+originals when read. The evidence board remains available for optional curation.
+
+See [the results workflow](docs/results-workflow.md) and its
+[functional validation](docs/results-validation.md). The source-only checkout does
+not include the historical case vault described in the older sections below.
+Missing originals, failed acquisitions and unavailable model/search services remain
+visible gaps; notes and synthetic acceptance fixtures are not case conclusions.
+
 ## Entity Resolution and Provenance Service
 
 The repository now includes the buildable Rust ERPS workspace, Postgres migrations,
@@ -12,7 +31,7 @@ Current checks and external blockers are recorded in the [ERPS validation record
 The [expanded security and regression report](docs/security-validation.md) includes
 the upload-limit fix, 10,000-mention capacity run and unresolved dependency findings.
 
-The current release runs on port **8010 inside the provided Linux workspace**. The address `http://127.0.0.1:8010` works only on that machine; opening it on your phone or computer connects to your own device. Remote access requires an authenticated forwarded URL or a configured private relay. See [access from another device](docs/erps.md#access-from-another-device). It opens on **Evidence board**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
+The current release runs on port **8010 inside the provided Linux workspace**. The address `http://127.0.0.1:8010` works only on that machine; opening it on your phone or computer connects to your own device. Remote access requires an authenticated forwarded URL or a configured private relay. See [access from another device](docs/erps.md#access-from-another-device). It opens on **Case results**, backed by unattended server workers. This is not an Apple Silicon deployment or a claim that the entire master specification is flawless or complete.
 
 ## GitHub source delivery
 
@@ -20,9 +39,9 @@ Source repository: **[samskiezz/sherlock-osint](https://github.com/samskiezz/she
 
 The prepared source snapshot includes application code, pinned dependency files, processors, migrations, tests and the implementation-gap register. The private-access Worker is included under `hosting/private-access`. The evidence vault, databases, credentials, generated investigation outputs, downloaded originals, model weights and old local Git history are excluded. Historical validation paths below refer to the original workspace and are not all distributed in this source snapshot. Engineering-reference audit metadata is retained where the application reads it; the referenced downloaded files are omitted. A metadata entry or a source upload is not an evidence archive or a deployed application.
 
-## Current default: bulletin board with the breakdown directly underneath
+## Historical board-first layout and case archive
 
-The app now opens on **Evidence board**. Its real XYFlow canvas remains at the top; the dossier verification and case breakdown are immediately beneath it in the same scrolling view. Board cards use compact text previews instead of repeatedly downloading all extracted documents. Clicking a supporting passage loads the full original into the inspector.
+The earlier home screen was **Evidence board**. Its XYFlow canvas, dossier verification and case breakdown remain available from that tab. The following historical records refer to the original case vault, which is omitted from the source-only checkout. The current in-app inventory and results, rather than these historical counts, establish what is available to read.
 
 The supplied expanded dossier is preserved as secondary evidence, SHA-256 `7daaf1409817c0dcb9ffbda7c9c8d031c835c96d7cb0cd8040d2028272698d77`, with **141 paragraph/bullet claim units**. The first source-coverage assessment records **3 supported, 10 partly supported and 128 not verified**. A partial result is not endorsement of the entire compound paragraph. Negative coverage assessments identify missing originals, blocked transcripts and unexamined audio/video. A bounded worker refreshes candidate passages when the source collection changes; a candidate match does not approve a claim.
 

@@ -2,6 +2,7 @@
 
 import json
 from fastapi import HTTPException
+from .receipt_sources import receipt_sources, derivative_binding_valid
 
 SCOPES = {
     "lab": ("Automatic analysis", ("decoder.", "gematria.", "visual.", "forensics.")),
@@ -85,7 +86,8 @@ def snapshot(core, workspace):
             continue
         d = json.loads(row["data"])
         result = d.get("result", {})
-        source = next(iter(result.get("sources", [])), None)
+        sources = receipt_sources(d)
+        source = next(iter(sources), None)
         if not source or not source.get("evidence_id"):
             continue
         eid = source["evidence_id"]
@@ -100,10 +102,11 @@ def snapshot(core, workspace):
         if (
             source.get("original_sha256") != e["sha256"]
             or source.get("text_sha256") != text_digest
+            or not derivative_binding_valid(core, source)
         ):
             continue
         all_sources_valid = True
-        for bound in result.get("sources", [])[1:]:
+        for bound in sources[1:]:
             other_id = bound.get("evidence_id")
             if other_id not in checked:
                 try:
@@ -115,6 +118,7 @@ def snapshot(core, workspace):
                 not other
                 or bound.get("original_sha256") != other[0]["sha256"]
                 or bound.get("text_sha256") != other[2]
+                or not derivative_binding_valid(core, bound)
             ):
                 all_sources_valid = False
                 break
@@ -294,7 +298,7 @@ def install(core):
             raise HTTPException(404, "Completed receipt not found")
         data = json.loads(rows[0]["data"])
         result = data.get("result", {})
-        sources = result.get("sources", [])
+        sources = receipt_sources(data)
         if not sources:
             raise HTTPException(409, "Receipt has no source binding")
         for source in sources:
@@ -309,6 +313,7 @@ def install(core):
             if (
                 source.get("original_sha256") != original["sha256"]
                 or source.get("text_sha256") != digest
+                or not derivative_binding_valid(core, source)
             ):
                 raise HTTPException(409, "Receipt source binding is stale")
         return {

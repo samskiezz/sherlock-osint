@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-16",
+  "scope": "Owned synthetic fixtures; current-instance functionality, not historical case conclusions or hosted deployment",
+  "python": {
+    "modules": [
+      {
+        "module": "test_results",
+        "cases": 13,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "exit_code": 0
+      },
+      {
+        "module": "test_automation_controller",
+        "exit_code": 0,
+        "seconds": 23.59,
+        "cases": 5,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "module": "test_case_briefing_automatic",
+        "exit_code": 0,
+        "seconds": 7.98,
+        "cases": 10,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "module": "test_v11_features",
+        "exit_code": 0,
+        "seconds": 129.49,
+        "cases": 12,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "module": "test_v12_automatic_visual",
+        "exit_code": 0,
+        "seconds": 211.93,
+        "cases": 11,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "module": "test_workflows",
+        "exit_code": 0,
+        "seconds": 364.43,
+        "cases": 16,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "module": "test_workspaces",
+        "exit_code": 0,
+        "seconds": 85.8,
+        "cases": 12,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "module": "test_erps",
+        "exit_code": 0,
+        "seconds": 8.71,
+        "cases": 16,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "unique_current_cases": 95,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "browser": {
+    "scope": "Explicitly synthetic owned fixture; no historical case conclusion",
+    "errors": [],
+    "apiErrors": [],
+    "immediate_analysis_dispatch": true,
+    "unattended_analysis": {
+      "state": "COMPLETE",
+      "completed": 30,
+      "failed": [],
+      "seconds": 62.843
+    },
+    "report_download": true,
+    "bookmarked_source_survives_reload": true,
+    "exposed_tools": 258,
+    "exposed_workspaces": 21,
+    "callable_tool_with_real_source": true,
+    "bookmarked_tool_output_survives_reload": true,
+    "source_bound_image_analysis": true,
+    "mobile_reading": true,
+    "original_bytes_preserved": true,
+    "case_report_download": true,
+    "status": "passed"
+  },
+  "navigation": {
+    "view_count": 24,
+    "page_errors": [],
+    "api_error_routes": [],
+    "resource_failures": [],
+    "unexpected_writes": [],
+    "existing_board_layout_autosaves": 2
+  },
+  "frontend_build": "passed",
+  "new_results_module_bandit_findings": 0,
+  "hosting": "private relay bindings absent; external app unverified",
+  "historical_originals": "not restored or fabricated",
+  "optional_model_and_search_readiness": "not established"
+}
